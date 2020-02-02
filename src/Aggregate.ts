@@ -9,6 +9,12 @@ export class Aggregate {
   }
 
   private applyAnEvent<T>(event: EventType<T>) {
+    if ((this as any)[event.event_name] === undefined) {
+      throw new Error(
+        `Aggregate "${this.constructor.name}" has no method ${event.event_name}(event) {}`
+      );
+    }
+
     try {
       (this as any)[event.event_name](event);
     } catch (err) {
