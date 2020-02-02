@@ -1,4 +1,13 @@
-*.log
-.DS_Store
+# Ignore all dotfiles by default
+*.
+
+# Keep certain dot files/folders
+!.gitignore
+!.github
+
+# Ignore node modules
 node_modules
+
+# Ignore generated folders
 dist
+coverage
