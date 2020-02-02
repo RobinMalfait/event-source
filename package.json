@@ -1,0 +1,48 @@
+{
+  "version": "0.0.1",
+  "name": "event-source",
+  "author": {
+    "email": "malfait.robin@gmail.com",
+    "name": "Robin Malfait"
+  },
+  "main": "dist/index.js",
+  "module": "dist/eventsource.esm.js",
+  "type": "module",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "tdd": "tsdx test --watch",
+    "lint": "tsdx lint",
+    "format": "tsdx lint --fix",
+    "prepare": "tsdx build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.1",
+    "husky": "^4.2.1",
+    "tsdx": "^0.12.3",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "@types/uuid": "^3.4.7",
+    "uuid": "^3.4.0",
+    "yamlify-object": "^0.5.1"
+  }
+}
