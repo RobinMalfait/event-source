@@ -4,6 +4,7 @@ export enum Events {
   BANK_ACCOUNT_HAS_BEEN_OPENED = 'BANK_ACCOUNT_HAS_BEEN_OPENED',
   MONEY_WAS_DEPOSITED = 'MONEY_WAS_DEPOSITED',
   MONEY_WAS_WITHDRAWN = 'MONEY_WAS_WITHDRAWN',
+  BANK_ACCOUNT_HAS_BEEN_CLOSED = 'BANK_ACCOUNT_HAS_BEEN_CLOSED',
 }
 
 export type BankAccountHasBeenOpened = ReturnType<
@@ -21,4 +22,11 @@ export function moneyWasDeposited(id: string, amount: number) {
 export type MoneyWasWithdrawn = ReturnType<typeof moneyWasWithdrawn>;
 export function moneyWasWithdrawn(id: string, amount: number) {
   return Event(Events.MONEY_WAS_WITHDRAWN, id, { amount });
+}
+
+export type BankAccountHasBeenClosed = ReturnType<
+  typeof bankAccountHasBeenClosed
+>;
+export function bankAccountHasBeenClosed(id: string) {
+  return Event(Events.BANK_ACCOUNT_HAS_BEEN_CLOSED, id, {});
 }
