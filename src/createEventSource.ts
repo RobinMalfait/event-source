@@ -4,26 +4,26 @@ import { Aggregate } from './Aggregate';
 import { createError } from './utils/createError';
 import { fail } from './utils/fail';
 
-export interface EventStore {
+export type EventStore = {
   persist<T>(events: EventType<T>[]): void | Promise<void>;
   load<T>(aggregate_id: string): EventType<T>[] | Promise<EventType<T>[]>;
   loadEvents<T>(): EventType<T>[] | Promise<EventType<T>[]>;
-}
+};
 
-export interface EventSourceConfig {
+export type EventSourceConfig = {
   store: EventStore | Promise<EventStore>;
   command_handlers: Record<string, CommandHandler<any>>;
   projectors?: Projector[];
   event_handlers?: EventHandler[];
-}
+};
 
 export type EventHandler = (event: EventType<any>, es: EventSource) => void;
 
-export interface Projector {
+export type Projector = {
   name: string;
   init: (es: EventSource) => Promise<any> | void;
   update: (event: EventType<any>) => Promise<any> | void;
-}
+};
 
 export type CommandHandler<T> = (
   command: CommandType<T>,

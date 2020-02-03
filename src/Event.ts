@@ -1,12 +1,12 @@
 import { uuid } from './utils/uuid';
 
-export interface EventType<T> {
+export type EventType<T> = {
   aggregate_id: string;
   event_id: string;
   event_name: string;
   payload: T;
   recorded_at: Date;
-}
+};
 
 export function Event<T>(
   event_name: string,
