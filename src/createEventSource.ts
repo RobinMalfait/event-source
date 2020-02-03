@@ -1,7 +1,6 @@
 import { EventType } from './Event';
 import { CommandType } from './Command';
 import { Aggregate } from './Aggregate';
-import { createError } from './utils/createError';
 import { abort } from './utils/abort';
 
 export type EventStore = {
@@ -60,7 +59,7 @@ export function createEventSource(config: EventSourceConfig) {
       const events = await store.load(aggregate_id);
 
       if (events.length <= 0) {
-        throw createError(
+        abort(
           `Aggregate(${aggregate.constructor.name}) with ID(${aggregate_id}) does not exist.`,
           { aggregate: aggregate.constructor.name, aggregate_id }
         );
@@ -83,7 +82,7 @@ export function createEventSource(config: EventSourceConfig) {
               try {
                 await projector.update(event);
               } catch (err) {
-                throw createError(
+                abort(
                   `An error occurred in one of your projections: ${projector.name}, given an event`,
                   {
                     projector: projector.name,
@@ -102,7 +101,7 @@ export function createEventSource(config: EventSourceConfig) {
               try {
                 await eventHandler(event, api);
               } catch (err) {
-                throw createError(
+                abort(
                   `An error occurred in one of your event handlers: ${eventHandler.name}, given an event`,
                   {
                     eventHandler: eventHandler.name,

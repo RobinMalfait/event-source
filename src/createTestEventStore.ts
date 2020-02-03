@@ -18,7 +18,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   if (used_test_event_store_in_test && !called_then_handler) {
-    throw new Error(
+    abort(
       'It seems like you used `createTestEventStore()`\nwithout using the `await then([expected, events, go, here, ...])`'
     );
   }

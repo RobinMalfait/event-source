@@ -1,4 +1,5 @@
 import { EventType } from './Event';
+import { abort } from './utils/abort';
 
 export class Aggregate {
   private version: number = 0;
@@ -10,7 +11,7 @@ export class Aggregate {
 
   private applyAnEvent<T>(event: EventType<T>) {
     if ((this as any)[event.event_name] === undefined) {
-      throw new Error(
+      abort(
         `Aggregate "${this.constructor.name}" has no method ${event.event_name}(event) {}`
       );
     }
