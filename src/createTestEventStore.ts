@@ -6,7 +6,7 @@ import {
 import { EventType } from './Event';
 import { CommandType } from './Command';
 import { objectToYaml } from './utils/objectToYaml';
-import { fail } from './utils/fail';
+import { abort } from './utils/abort';
 
 const PLACEHOLDER = Symbol('__placeholder__');
 
@@ -93,7 +93,7 @@ export function createTestEventStore(
       if (caught_error) {
         if (Object.keys(caught_error).length > 0) {
           const [, ...lines] = caught_error.stack!.split('\n');
-          fail('With properties:', {
+          abort('With properties:', {
             stack: [
               `\n\n${objectToYaml(caught_error)}\n\n${caught_error.name}: ${
                 caught_error.message

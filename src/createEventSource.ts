@@ -2,7 +2,7 @@ import { EventType } from './Event';
 import { CommandType } from './Command';
 import { Aggregate } from './Aggregate';
 import { createError } from './utils/createError';
-import { fail } from './utils/fail';
+import { abort } from './utils/abort';
 
 export type EventStore = {
   persist<T>(events: EventType<T>[]): void | Promise<void>;
@@ -42,7 +42,7 @@ export function createEventSource(config: EventSourceConfig) {
   const api = {
     async dispatch<T>(command: CommandType<T>) {
       if (command_handlers[command.type] === undefined) {
-        fail(`There is no command handler for the "${command.type}" command`);
+        abort(`There is no command handler for the "${command.type}" command`);
       }
 
       const handle = command_handlers[command.type];

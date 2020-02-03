@@ -10,7 +10,7 @@ import {
   bankAccountHasBeenClosed,
   BankAccountHasBeenClosed,
 } from './events';
-import { fail } from '../../src/utils/fail';
+import { abort } from '../../src/utils/abort';
 
 export class Account extends Aggregate {
   private id: string;
@@ -25,7 +25,7 @@ export class Account extends Aggregate {
 
   deposit(amount: number) {
     if (this.closed) {
-      fail('Account has been closed', { id: this.id });
+      abort('Account has been closed', { id: this.id });
     }
 
     this.recordThat(moneyWasDeposited(this.id, amount));
@@ -33,11 +33,11 @@ export class Account extends Aggregate {
 
   withdraw(amount: number) {
     if (this.closed) {
-      fail('Account has been closed', { id: this.id });
+      abort('Account has been closed', { id: this.id });
     }
 
     if (amount > this.balance) {
-      fail('Not enough money to withdraw money', {
+      abort('Not enough money to withdraw money', {
         id: this.id,
         balance: this.balance,
         amount,
@@ -49,7 +49,7 @@ export class Account extends Aggregate {
 
   close() {
     if (this.closed) {
-      fail('Account has already been closed', { id: this.id });
+      abort('Account has already been closed', { id: this.id });
     }
 
     this.recordThat(bankAccountHasBeenClosed(this.id));
