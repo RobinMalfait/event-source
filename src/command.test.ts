@@ -1,4 +1,4 @@
-import { Command } from './Command';
+import { Command } from './command';
 
 it('should return a command object', () => {
   expect(Command('my-command', { some: 'arguments', go: 'here' })).toEqual({

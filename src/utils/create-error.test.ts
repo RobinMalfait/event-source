@@ -1,4 +1,4 @@
-import { createError } from './createError';
+import { createError } from './create-error';
 
 it('should be possible to create an error', () => {
   const error = createError('My Error');

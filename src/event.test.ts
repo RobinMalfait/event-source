@@ -1,4 +1,4 @@
-import { Event } from './Event';
+import { Event } from './event';
 import { uuid } from './utils/uuid';
 
 it('should return an event object', () => {

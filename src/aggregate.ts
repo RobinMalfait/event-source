@@ -1,4 +1,4 @@
-import { EventType } from './Event';
+import { EventType } from './event';
 import { abort } from './utils/abort';
 
 export class Aggregate {

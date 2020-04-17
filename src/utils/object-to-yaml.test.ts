@@ -1,5 +1,5 @@
-import { objectToYaml } from './objectToYaml';
-import { createError } from './createError';
+import { objectToYaml } from './object-to-yaml';
+import { createError } from './create-error';
 
 it('should be possible to print an object with a single scalar value', () => {
   const obj = { hello: 'world' };

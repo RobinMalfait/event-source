@@ -1,6 +1,6 @@
 import { Account } from '../Account';
 import { WithdrawMoney } from '../commands';
-import { EventSource } from '../../../src/createEventSource';
+import { EventSource } from '../../../src/create-event-source';
 
 export async function withdrawMoneyHandler(
   command: WithdrawMoney,

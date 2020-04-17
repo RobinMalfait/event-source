@@ -1,6 +1,6 @@
-import { EventType } from './Event';
-import { CommandType } from './Command';
-import { Aggregate } from './Aggregate';
+import { EventType } from './event';
+import { CommandType } from './command';
+import { Aggregate } from './aggregate';
 import { abort } from './utils/abort';
 
 export type EventStore = {

@@ -1,5 +1,5 @@
-import { createTestEventStore } from '../../../src/createTestEventStore';
-import { withdrawMoneyHandler } from '../command-handlers/withdrawMoneyHandler';
+import { createTestEventStore } from '../../../src/create-test-event-store';
+import { withdrawMoneyHandler } from '../command-handlers/withdraw-money-handler';
 import { Commands, withdrawMoney } from '../commands';
 import {
   bankAccountHasBeenOpened,

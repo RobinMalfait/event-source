@@ -1,7 +1,7 @@
-export { Aggregate } from './Aggregate';
-export { Command } from './Command';
-export { Event } from './Event';
-export * from './createEventSource';
-export { createEventMapper } from './createEventMapper';
-export { createProjector } from './createProjector';
-export { createTestEventStore } from './createTestEventStore';
+export { Aggregate } from './aggregate';
+export { Command } from './command';
+export { Event } from './event';
+export * from './create-event-source';
+export { createEventMapper } from './create-event-mapper';
+export { createProjector } from './create-projector';
+export { createTestEventStore } from './create-test-event-store';

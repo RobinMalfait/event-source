@@ -1,1 +1,1 @@
-export * from './createMySQLEventStore';
+export * from './create-mysql-event-store';

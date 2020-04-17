@@ -1,6 +1,6 @@
-import { EventType } from './Event';
-import { EventSource, Projector } from './createEventSource';
-import { Queue } from './utils/Queue';
+import { EventType } from './event';
+import { EventSource, Projector } from './create-event-source';
+import { Queue } from './utils/queue';
 
 type EventMapper = Record<string, (event: EventType<any>) => void>;
 

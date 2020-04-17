@@ -2,10 +2,10 @@ import {
   CommandHandler,
   createEventSource,
   Projector,
-} from './createEventSource';
-import { EventType } from './Event';
-import { CommandType } from './Command';
-import { objectToYaml } from './utils/objectToYaml';
+} from './create-event-source';
+import { EventType } from './event';
+import { CommandType } from './command';
+import { objectToYaml } from './utils/object-to-yaml';
 import { abort } from './utils/abort';
 
 const PLACEHOLDER = Symbol('__placeholder__');

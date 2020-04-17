@@ -1,6 +1,6 @@
 import { Account } from '../Account';
 import { CloseBankAccount } from '../commands';
-import { EventSource } from '../../../src/createEventSource';
+import { EventSource } from '../../../src/create-event-source';
 
 export async function closeBankAccountHandler(
   command: CloseBankAccount,

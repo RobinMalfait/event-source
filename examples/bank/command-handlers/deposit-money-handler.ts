@@ -1,6 +1,6 @@
-import { Account } from '../Account';
+import { Account } from '../account';
 import { DepositMoney } from '../commands';
-import { EventSource } from '../../../src/createEventSource';
+import { EventSource } from '../../../src/create-event-source';
 
 export async function depositMoneyHandler(
   command: DepositMoney,

@@ -1,6 +1,6 @@
 import Knex from 'knex';
-import { EventStore } from '../createEventSource';
-import { EventType } from '../Event';
+import { EventStore } from '../create-event-source';
+import { EventType } from '../event';
 
 export function createMySQLEventStore(db: Knex): EventStore {
   return {
