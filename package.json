@@ -18,8 +18,8 @@
     "build": "tsdx build",
     "test": "tsdx test",
     "tdd": "tsdx test --watch",
-    "lint": "tsdx lint",
-    "format": "tsdx lint --fix",
+    "lint": "tsdx lint src",
+    "format": "tsdx lint src --fix",
     "prepare": "tsdx build"
   },
   "husky": {
