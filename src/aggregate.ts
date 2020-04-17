@@ -3,7 +3,7 @@ import { abort } from './utils/abort';
 
 export class Aggregate {
   private version: number = 0;
-  private recorded_events: EventType<any>[] = [];
+  private recorded_events: EventType<unknown>[] = [];
 
   public replayEvents<T>(events: EventType<T>[] = []) {
     return events.reduce((self, event) => self.applyAnEvent(event), this);

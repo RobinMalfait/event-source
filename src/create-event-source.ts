@@ -120,9 +120,9 @@ export function createEventSource(config: EventSourceConfig) {
   };
 
   // Run all projection initializers
-  projectors.forEach(projector => {
+  for (let projector of projectors) {
     projector.init(api);
-  });
+  }
 
   return api;
 }

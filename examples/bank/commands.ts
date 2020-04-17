@@ -10,10 +10,7 @@ export enum Commands {
 
 export type OpenBankAccount = ReturnType<typeof openBankAccount>;
 export function openBankAccount(name: string) {
-  return Command(Commands.OPEN_BANK_ACCOUNT, {
-    id: uuid(),
-    name,
-  });
+  return Command(Commands.OPEN_BANK_ACCOUNT, { id: uuid(), name });
 }
 
 export type DepositMoney = ReturnType<typeof depositMoney>;

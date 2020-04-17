@@ -8,10 +8,6 @@ type EventMapper = Record<
 
 export function createEventMapper(mapper: EventMapper) {
   return (event: EventType<any>, es: EventSource) => {
-    if (!mapper[event.event_name] === undefined) {
-      return;
-    }
-
-    return mapper[event.event_name](event, es);
+    return mapper[event.event_name]?.(event, es);
   };
 }

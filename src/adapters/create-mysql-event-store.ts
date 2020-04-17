@@ -25,11 +25,11 @@ export function createMySQLEventStore(db: Knex): EventStore {
     },
     persist(events: EventType<any>[]) {
       return db.transaction(trx => {
-        events.forEach(event => {
+        for (let event of events) {
           trx
             .insert({ ...event, payload: JSON.stringify(event.payload) })
             .into('events');
-        });
+        }
       });
     },
   };
