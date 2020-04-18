@@ -35,13 +35,13 @@
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
+    "@types/uuid": "^7.0.2",
     "husky": "^4.2.5",
     "tsdx": "^0.13.2",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@types/uuid": "^7.0.2",
     "uuid": "^7.0.3",
     "yamlify-object": "^0.5.1"
   }
