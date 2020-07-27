@@ -2,10 +2,9 @@ import { get, set } from './secret';
 import { uuid } from './uuid';
 
 type UnitOfWork = {
-  unit: Function;
+  unit: () => void;
   resolve: (value: unknown) => unknown;
   reject: (value: unknown) => unknown;
-  pushed_at: number;
 };
 
 type QueueSecret = {
@@ -57,17 +56,16 @@ export class Queue {
     return get<QueueSecret>(this).queue.length;
   }
 
-  push(unit: Function): Promise<unknown> {
+  push(unit: () => void): Promise<unknown> {
     return new Promise((resolve, reject) => {
       const { queue, state } = get<QueueSecret>(this);
-      const unitOfWork: UnitOfWork = {
+      const unit_of_work: UnitOfWork = {
         unit,
         resolve,
         reject,
-        pushed_at: Date.now(),
       };
 
-      queue.push(unitOfWork);
+      queue.push(unit_of_work);
 
       if (state === State.NEUTRAL) {
         start(this);

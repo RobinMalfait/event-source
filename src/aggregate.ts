@@ -1,5 +1,6 @@
 import { EventType } from './event';
 import { abort } from './utils/abort';
+import { deepFreeze } from './utils/deep-freeze';
 
 export class Aggregate {
   private version: number = 0;
@@ -10,10 +11,20 @@ export class Aggregate {
   }
 
   private applyAnEvent<T>(event: EventType<T>) {
+    if (process.env.NODE_ENV === 'test') {
+      deepFreeze(event);
+    }
+
     if ((this as any)[event.event_name] === undefined) {
-      abort(
-        `Aggregate "${this.constructor.name}" has no method ${event.event_name}(event) {}`
-      );
+      if (event.event_name.match(/^[$A-Z_][0-9A-Z_$]*$/i)) {
+        abort(
+          `Aggregate "${this.constructor.name}" has no method:\n\n${event.event_name}(event) {\n\t// Code goes here...\n}`
+        );
+      } else {
+        abort(
+          `Aggregate "${this.constructor.name}" has no method:\n\n['${event.event_name}'](event) {\n\t// Code goes here...\n}`
+        );
+      }
     }
 
     try {

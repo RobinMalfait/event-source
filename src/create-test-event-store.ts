@@ -12,17 +12,21 @@ const PLACEHOLDER = Symbol('__placeholder__');
 
 let used_test_event_store_in_test = false;
 let called_then_handler = false;
-beforeEach(() => {
-  used_test_event_store_in_test = false;
-  called_then_handler = false;
-});
-afterEach(() => {
-  if (used_test_event_store_in_test && !called_then_handler) {
-    abort(
-      'It seems like you used `createTestEventStore()`\nwithout using the `await then([expected, events, go, here, ...])`'
-    );
-  }
-});
+
+if (process.env.NODE_ENV === 'test') {
+  beforeEach(() => {
+    used_test_event_store_in_test = false;
+    called_then_handler = false;
+  });
+
+  afterEach(() => {
+    if (used_test_event_store_in_test && !called_then_handler) {
+      abort(
+        'It seems like you used `createTestEventStore()`\nwithout using the `await then([expected, events, go, here, ...])`'
+      );
+    }
+  });
+}
 
 export function createTestEventStore(
   command_handlers: Record<string, CommandHandler<any>>,

@@ -23,22 +23,14 @@ export function createProjector(
       const events = await es.loadEvents<any>();
       await Promise.all(
         events.map(event => {
-          if (mapper[event.event_name] === undefined) {
-            return undefined;
-          }
-
-          return q.push(() => mapper[event.event_name](event));
+          return q.push(() => mapper[event.event_name]?.(event));
         })
       );
 
       await initialized;
     },
     update(event: EventType<any>) {
-      if (mapper[event.event_name] === undefined) {
-        return;
-      }
-
-      return q.push(() => mapper[event.event_name](event));
+      return q.push(() => mapper[event.event_name]?.(event));
     },
   };
 }
