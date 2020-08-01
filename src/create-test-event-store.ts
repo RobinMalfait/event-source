@@ -10,22 +10,35 @@ import { abort } from './utils/abort';
 
 const PLACEHOLDER = Symbol('__placeholder__');
 
-let used_test_event_store_in_test = false;
-let called_then_handler = false;
+const info = {
+  used_test_event_store_in_test: false,
+  called_then_handler: false,
+};
 
 if (process.env.NODE_ENV === 'test') {
   beforeEach(() => {
-    used_test_event_store_in_test = false;
-    called_then_handler = false;
+    info.used_test_event_store_in_test = false;
+    info.called_then_handler = false;
   });
 
   afterEach(() => {
-    if (used_test_event_store_in_test && !called_then_handler) {
+    if (info.used_test_event_store_in_test && !info.called_then_handler) {
       abort(
         'It seems like you used `createTestEventStore()`\nwithout using the `await then([expected, events, go, here, ...])`'
       );
     }
   });
+}
+
+function cleanThrow(cb: () => unknown, fn: Function) {
+  try {
+    return cb();
+  } catch (e) {
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(e, fn);
+    }
+    throw e;
+  }
 }
 
 export function createTestEventStore(
@@ -35,7 +48,7 @@ export function createTestEventStore(
   const db: EventType<any>[] = [];
   const produced_events: EventType<any>[] = [];
 
-  used_test_event_store_in_test = true;
+  info.used_test_event_store_in_test = true;
 
   function createTestRecordingProjector() {
     return {
@@ -67,7 +80,7 @@ export function createTestEventStore(
 
   let caught_error: Error;
 
-  return {
+  const returnValue = {
     ___: PLACEHOLDER as any, // Expose as type `any` so that it is assignable to values
     given(events: EventType<any>[] = []) {
       db.push(...events);
@@ -83,12 +96,14 @@ export function createTestEventStore(
     then<T>(events: EventType<T>[] | Error) {
       // Mark that we called the then function. If not we probably had a
       // successful test that actually didn't test anything!
-      called_then_handler = true;
+      info.called_then_handler = true;
 
       // We expect errors, so let's verify the error
       if (events instanceof Error) {
-        const error = events;
-        expect(caught_error).toEqual(error);
+        cleanThrow(
+          () => expect(caught_error).toEqual(events),
+          returnValue.then
+        );
         return;
       }
 
@@ -96,45 +111,44 @@ export function createTestEventStore(
       // Therefore, we have to re-throw the error
       if (caught_error) {
         if (Object.keys(caught_error).length > 0) {
-          const [, ...lines] = caught_error.stack!.split('\n');
-          abort('With properties:', {
-            stack: [
-              `\n\n${objectToYaml(caught_error)}\n\n${caught_error.name}: ${
-                caught_error.message
-              }`,
-              ...lines,
-            ].join('\n'),
-          });
-        } else {
-          throw caught_error;
+          caught_error.message = [
+            'With properties:',
+            `\n${objectToYaml(caught_error)}\n\n---\n\n`,
+          ].join('\n');
         }
+
+        throw caught_error;
       }
 
-      // Verify that the actual events and expected events have the same length
-      expect(events).toHaveLength(produced_events.length);
+      cleanThrow(() => {
+        // Verify that the actual events and expected events have the same length
+        expect(events).toHaveLength(produced_events.length);
 
-      // Verify each individual event
-      events.forEach((event, index) => {
-        const { aggregate_id, event_name, payload } = produced_events[index];
+        // Verify each individual event
+        events.forEach((event, index) => {
+          const { aggregate_id, event_name, payload } = produced_events[index];
 
-        expect(event.aggregate_id).toEqual(aggregate_id);
-        expect(event.event_name).toEqual(event_name);
+          expect(event.aggregate_id).toEqual(aggregate_id);
+          expect(event.event_name).toEqual(event_name);
 
-        if (event.payload === null || event.payload === undefined) {
-          expect(event.payload).toEqual(payload);
-        }
-
-        for (const key in event.payload) {
-          const value = event.payload[key] as any;
-
-          if (value === PLACEHOLDER) {
-            expect(payload).toHaveProperty(key);
-            expect(payload[key]).toBeDefined();
-          } else {
-            expect(payload[key]).toEqual(value);
+          if (event.payload === null || event.payload === undefined) {
+            expect(event.payload).toEqual(payload);
           }
-        }
-      });
+
+          for (const key in event.payload) {
+            const value = event.payload[key] as any;
+
+            if (value === PLACEHOLDER) {
+              expect(payload).toHaveProperty(key);
+              expect(payload[key]).toBeDefined();
+            } else {
+              expect(payload[key]).toEqual(value);
+            }
+          }
+        });
+      }, returnValue.then);
     },
   };
+
+  return returnValue;
 }

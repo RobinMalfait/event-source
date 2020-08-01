@@ -12,11 +12,13 @@ const instances = new WeakMap();
  * object, so that you can store avlues specifically for this reference.
  */
 
-export function set<T>(key: object, data: T): void {
+export function set<T>(key: object, data: Partial<T>): void {
   if (instances.has(key)) {
     const original = instances.get(key);
 
-    instances.set(key, { ...original, ...data });
+    for (let key in data) {
+      original[key] = data[key];
+    }
   } else {
     instances.set(key, data);
   }

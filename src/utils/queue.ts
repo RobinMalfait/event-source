@@ -1,75 +1,57 @@
 import { get, set } from './secret';
-import { uuid } from './uuid';
 
-type UnitOfWork = {
-  unit: () => void;
+type Job = {
+  handle: () => void;
   resolve: (value: unknown) => unknown;
   reject: (value: unknown) => unknown;
 };
 
 type QueueSecret = {
-  queue: Array<UnitOfWork>;
+  jobs: Job[];
   state: State;
-  id: string;
 };
 
 enum State {
+  IDLE,
   STARTED,
-  NEUTRAL,
-}
-
-function start(instance: Queue): Promise<any> {
-  set<State>(instance, State.STARTED);
-
-  return new Promise((resolveStart, rejectStart) => {
-    setImmediate(() => {
-      const { queue } = get<QueueSecret>(instance);
-
-      if (queue.length > 0) {
-        const { unit, resolve, reject } = queue.shift()!;
-
-        // Handle the unit
-        const resolved = Promise.resolve(unit());
-
-        // Resolve / reject the push unit
-        resolved.then(resolve, reject);
-
-        // Handle the next item
-        resolved.then(resolveStart, rejectStart).then(() => start(instance));
-      }
-
-      set<State>(instance, State.NEUTRAL);
-    });
-  });
 }
 
 export class Queue {
   constructor() {
-    set<QueueSecret>(this, {
-      queue: [],
-      state: State.NEUTRAL,
-      id: uuid(),
-    });
+    set<QueueSecret>(this, { jobs: [], state: State.IDLE });
   }
 
   get length(): number {
-    return get<QueueSecret>(this).queue.length;
+    return get<QueueSecret>(this).jobs.length;
   }
 
-  push(unit: () => void): Promise<unknown> {
+  async start() {
+    const { state, jobs } = get<QueueSecret>(this);
+
+    if (state === State.STARTED || jobs.length <= 0) {
+      return;
+    }
+
+    set<QueueSecret>(this, { state: State.STARTED });
+
+    while (jobs.length > 0) {
+      const job = jobs.shift()!;
+
+      // Handle the job
+      const settled = Promise.resolve().then(() => job.handle());
+
+      // Resolve / reject the job promise wrapper
+      await settled.then(job.resolve, job.reject);
+    }
+
+    set<QueueSecret>(this, { state: State.IDLE });
+  }
+
+  push(handle: Job['handle']): Promise<unknown> {
     return new Promise((resolve, reject) => {
-      const { queue, state } = get<QueueSecret>(this);
-      const unit_of_work: UnitOfWork = {
-        unit,
-        resolve,
-        reject,
-      };
-
-      queue.push(unit_of_work);
-
-      if (state === State.NEUTRAL) {
-        start(this);
-      }
+      const { jobs } = get<QueueSecret>(this);
+      jobs.push({ handle, resolve, reject });
+      setImmediate(() => this.start());
     });
   }
 }

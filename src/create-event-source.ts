@@ -87,16 +87,24 @@ export function createEventSource(config: EventSourceConfig) {
             try {
               await projector.update(event);
             } catch (err) {
-              abort(
+              // abort(
+              //   `An error occurred in one of your projections: ${projector.name}, given an event`,
+              //   {
+              //     projector: projector.name,
+              //     event_id: event.event_id,
+              //     event_name: event.event_name,
+              //     aggregate_id: event.aggregate_id,
+              //     recorded_at: event.recorded_at,
+              //   }
+              // );
+              console.error(
                 `An error occurred in one of your projections: ${projector.name}, given an event`,
-                {
-                  projector: projector.name,
-                  event_id: event.event_id,
-                  event_name: event.event_name,
-                  aggregate_id: event.aggregate_id,
-                  recorded_at: event.recorded_at,
-                }
+                err.stack
+                  .split('\n')
+                  .map((line: string) => `  ${line}`)
+                  .join('\n')
               );
+              throw err;
             }
           })
         );
@@ -107,16 +115,24 @@ export function createEventSource(config: EventSourceConfig) {
             try {
               await eventHandler(event, api);
             } catch (err) {
-              abort(
+              console.error(
                 `An error occurred in one of your event handlers: ${eventHandler.name}, given an event`,
-                {
-                  eventHandler: eventHandler.name,
-                  event_id: event.event_id,
-                  event_name: event.event_name,
-                  aggregate_id: event.aggregate_id,
-                  recorded_at: event.recorded_at,
-                }
+                err.stack
+                  .split('\n')
+                  .map((line: string) => `  ${line}`)
+                  .join('\n')
               );
+              throw err;
+              // abort(
+              //   `An error occurred in one of your event handlers: ${eventHandler.name}, given an event`,
+              //   {
+              //     eventHandler: eventHandler.name,
+              //     event_id: event.event_id,
+              //     event_name: event.event_name,
+              //     aggregate_id: event.aggregate_id,
+              //     recorded_at: event.recorded_at,
+              //   }
+              // );
             }
           })
         );

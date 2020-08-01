@@ -33,15 +33,15 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.1",
-    "@types/uuid": "^7.0.3",
+    "@types/jest": "^26.0.7",
+    "@types/uuid": "^8.0.0",
     "husky": "^4.2.5",
     "tsdx": "^0.13.2",
-    "tslib": "^1.11.2",
-    "typescript": "^3.8.3"
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.7"
   },
   "dependencies": {
-    "uuid": "^8.0.0",
+    "uuid": "^8.3.0",
     "yamlify-object": "^0.5.1"
   }
 }

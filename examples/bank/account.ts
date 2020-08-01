@@ -12,10 +12,15 @@ import {
 } from './events';
 import { abort } from '../../src/utils/abort';
 
+enum State {
+  OPEN,
+  CLOSED,
+}
+
 export class Account extends Aggregate {
   private id: string;
   private balance: number;
-  private closed: boolean;
+  private state: State;
 
   static open(id: string, name: string) {
     const account = new Account();
@@ -24,7 +29,7 @@ export class Account extends Aggregate {
   }
 
   deposit(amount: number) {
-    if (this.closed) {
+    if (this.state === State.CLOSED) {
       abort('Account has been closed', { id: this.id });
     }
 
@@ -32,7 +37,7 @@ export class Account extends Aggregate {
   }
 
   withdraw(amount: number) {
-    if (this.closed) {
+    if (this.state === State.CLOSED) {
       abort('Account has been closed', { id: this.id });
     }
 
@@ -48,7 +53,7 @@ export class Account extends Aggregate {
   }
 
   close() {
-    if (this.closed) {
+    if (this.state === State.CLOSED) {
       abort('Account has already been closed', { id: this.id });
     }
 
@@ -58,7 +63,7 @@ export class Account extends Aggregate {
   [Events.BANK_ACCOUNT_HAS_BEEN_OPENED](event: BankAccountHasBeenOpened) {
     this.id = event.aggregate_id;
     this.balance = 0;
-    this.closed = false;
+    this.state = State.OPEN;
   }
 
   [Events.MONEY_WAS_DEPOSITED](event: MoneyWasDeposited) {
@@ -70,6 +75,6 @@ export class Account extends Aggregate {
   }
 
   [Events.BANK_ACCOUNT_HAS_BEEN_CLOSED](_event: BankAccountHasBeenClosed) {
-    this.closed = true;
+    this.state = State.CLOSED;
   }
 }

@@ -8,9 +8,7 @@ it('should be possible to push something to the Queue', () => {
   const q = new Queue();
   const fn = jest.fn();
 
-  q.push(() => {
-    fn();
-  });
+  q.push(fn);
 
   expect(q.length).toBe(1);
 });
@@ -30,9 +28,7 @@ it('should be possible to push something to the Queue and wait for it to be hand
   const q = new Queue();
   const fn = jest.fn();
 
-  const returnValue = q.push(() => {
-    fn();
-  });
+  const returnValue = q.push(fn);
 
   expect(q.length).toBe(1);
 
@@ -74,7 +70,10 @@ it('should wait to handle the next item if the unit of work returns a promise', 
     fn(2);
 
     return new Promise(resolve => {
-      setTimeout(resolve, 100);
+      setTimeout(() => {
+        fn(2.5);
+        resolve();
+      }, 100);
     });
   });
 
@@ -82,5 +81,18 @@ it('should wait to handle the next item if the unit of work returns a promise', 
     fn(3);
   });
 
-  expect(fn.mock.calls).toEqual([[1], [2], [3]]);
+  expect(fn.mock.calls).toEqual([[1], [2], [2.5], [3]]);
+});
+
+it('should be possible to catch errors', async () => {
+  const q = new Queue();
+  const fn = jest.fn();
+
+  await q
+    .push(() => {
+      throw new Error('Catch me if you can!');
+    })
+    .catch(fn);
+
+  expect(fn).toHaveBeenCalledWith(new Error('Catch me if you can!'));
 });

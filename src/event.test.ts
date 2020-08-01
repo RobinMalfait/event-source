@@ -6,9 +6,7 @@ it('should return an event object', () => {
     event_name: 'my-event',
     aggregate_id: expect.stringContaining('-4'), // A uuid
     event_id: expect.stringContaining('-4'), // A uuid
-    payload: {
-      some: 'payload',
-    },
+    payload: { some: 'payload' },
     recorded_at: expect.any(Date),
   });
 });
