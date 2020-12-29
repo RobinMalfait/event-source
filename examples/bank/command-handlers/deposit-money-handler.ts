@@ -6,7 +6,7 @@ export async function depositMoneyHandler(
   command: DepositMoney,
   es: EventSource
 ) {
-  const account = await es.load(new Account(), command.payload.id);
+  let account = await es.load(new Account(), command.payload.id);
 
   account.deposit(command.payload.amount);
 

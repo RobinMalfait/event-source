@@ -23,7 +23,7 @@ export class Account extends Aggregate {
   private state: State;
 
   static open(id: string, name: string) {
-    const account = new Account();
+    let account = new Account();
     account.recordThat(bankAccountHasBeenOpened(id, name));
     return account;
   }

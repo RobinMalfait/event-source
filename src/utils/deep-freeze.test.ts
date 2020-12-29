@@ -1,7 +1,7 @@
 import { deepFreeze } from './deep-freeze';
 
 it('should be possible to freeze a shallow object', () => {
-  const obj = deepFreeze({ a: 1 });
+  let obj = deepFreeze({ a: 1 });
 
   expect(obj).toEqual({ a: 1 });
 
@@ -12,7 +12,7 @@ it('should be possible to freeze a shallow object', () => {
 });
 
 it('should be possible to freeze a shallow array', () => {
-  const obj = deepFreeze([1, 2, 3]);
+  let obj = deepFreeze([1, 2, 3]);
 
   expect(obj).toEqual([1, 2, 3]);
 
@@ -23,7 +23,7 @@ it('should be possible to freeze a shallow array', () => {
 });
 
 it('should be possible to freeze a nested object', () => {
-  const obj = deepFreeze({ a: { b: { c: 1 } } });
+  let obj = deepFreeze({ a: { b: { c: 1 } } });
 
   expect(obj).toEqual({ a: { b: { c: 1 } } });
 

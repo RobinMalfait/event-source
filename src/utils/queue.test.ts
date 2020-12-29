@@ -5,8 +5,8 @@ it('should be possible to create a Queue instance', () => {
 });
 
 it('should be possible to push something to the Queue', () => {
-  const q = new Queue();
-  const fn = jest.fn();
+  let q = new Queue();
+  let fn = jest.fn();
 
   q.push(fn);
 
@@ -14,10 +14,10 @@ it('should be possible to push something to the Queue', () => {
 });
 
 it('should return a promise when pushing to the Queue', () => {
-  const q = new Queue();
-  const fn = jest.fn();
+  let q = new Queue();
+  let fn = jest.fn();
 
-  const returnValue = q.push(() => {
+  let returnValue = q.push(() => {
     fn();
   });
 
@@ -25,10 +25,10 @@ it('should return a promise when pushing to the Queue', () => {
 });
 
 it('should be possible to push something to the Queue and wait for it to be handled', async () => {
-  const q = new Queue();
-  const fn = jest.fn();
+  let q = new Queue();
+  let fn = jest.fn();
 
-  const returnValue = q.push(fn);
+  let returnValue = q.push(fn);
 
   expect(q.length).toBe(1);
 
@@ -39,8 +39,8 @@ it('should be possible to push something to the Queue and wait for it to be hand
 });
 
 it('should run every item pushed to the queue in order', async () => {
-  const q = new Queue();
-  const fn = jest.fn();
+  let q = new Queue();
+  let fn = jest.fn();
 
   q.push(() => {
     fn(1);
@@ -59,8 +59,8 @@ it('should run every item pushed to the queue in order', async () => {
 
 // This part guarantees the order of execution and that we are actually DONE
 it('should wait to handle the next item if the unit of work returns a promise', async () => {
-  const q = new Queue();
-  const fn = jest.fn();
+  let q = new Queue();
+  let fn = jest.fn();
 
   q.push(() => {
     fn(1);
@@ -85,8 +85,8 @@ it('should wait to handle the next item if the unit of work returns a promise', 
 });
 
 it('should be possible to catch errors', async () => {
-  const q = new Queue();
-  const fn = jest.fn();
+  let q = new Queue();
+  let fn = jest.fn();
 
   await q
     .push(() => {

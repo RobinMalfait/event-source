@@ -1,7 +1,7 @@
 import { createError } from './create-error';
 
 it('should be possible to create an error', () => {
-  const error = createError('My Error');
+  let error = createError('My Error');
 
   expect(error).toBeInstanceOf(Error);
   expect(error).toHaveProperty('message');
@@ -9,7 +9,7 @@ it('should be possible to create an error', () => {
 });
 
 it('should be possible to create an error with extra properties', () => {
-  const error = createError('My Error', { hello: 'world' });
+  let error = createError('My Error', { hello: 'world' });
 
   expect(error).toBeInstanceOf(Error);
   expect(error).toHaveProperty('message');

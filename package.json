@@ -18,7 +18,7 @@
     "test": "tsdx test",
     "tdd": "tsdx test --watch",
     "lint": "tsdx lint src",
-    "format": "tsdx lint src --fix",
+    "format": "tsdx lint ./{src,examples}/**/*.ts --fix",
     "prepare": "tsdx build"
   },
   "husky": {

@@ -6,7 +6,7 @@ export async function openBankAccountHandler(
   command: OpenBankAccount,
   es: EventSource
 ) {
-  const account = Account.open(command.payload.id, command.payload.name);
+  let account = Account.open(command.payload.id, command.payload.name);
 
   return es.persist(account);
 }

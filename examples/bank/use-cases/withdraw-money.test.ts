@@ -10,11 +10,11 @@ import {
 import { uuid } from '../../../src/utils/uuid';
 
 it('should be possible to withdraw money from a bank account', async () => {
-  const { given, when, then } = createTestEventStore({
+  let { given, when, then } = createTestEventStore({
     [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
   });
 
-  const id = uuid();
+  let id = uuid();
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),
@@ -25,11 +25,11 @@ it('should be possible to withdraw money from a bank account', async () => {
 });
 
 it('should not be possible to withdraw money from a bank account that has insufficient funds', async () => {
-  const { given, when, then } = createTestEventStore({
+  let { given, when, then } = createTestEventStore({
     [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
   });
 
-  const id = uuid();
+  let id = uuid();
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),
@@ -40,11 +40,11 @@ it('should not be possible to withdraw money from a bank account that has insuff
 });
 
 it('should not be possible to withdraw money from closed a bank account', async () => {
-  const { given, when, then } = createTestEventStore({
+  let { given, when, then } = createTestEventStore({
     [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
   });
 
-  const id = uuid();
+  let id = uuid();
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),

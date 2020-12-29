@@ -11,16 +11,16 @@ export function createProjector(
   mapper: EventMapper,
   initializer = noop
 ): Projector {
-  const q = new Queue();
+  let q = new Queue();
 
   return {
     name,
     async init(es: EventSource) {
       // Let's run the initializer
-      const initialized = q.push(() => initializer());
+      let initialized = q.push(() => initializer());
 
       // Re-build the projection from scratch
-      const events = await es.loadEvents<any>();
+      let events = await es.loadEvents<any>();
       await Promise.all(
         events.map(event => {
           return q.push(() => mapper[event.event_name]?.(event));

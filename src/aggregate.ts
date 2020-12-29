@@ -46,7 +46,7 @@ export class Aggregate {
   }
 
   protected recordThat<T>(event: EventType<T>) {
-    const event_to_store = {
+    let event_to_store = {
       ...event,
       version: this.version,
     };

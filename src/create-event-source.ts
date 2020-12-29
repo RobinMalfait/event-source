@@ -16,7 +16,10 @@ export type EventSourceConfig = {
   event_handlers?: EventHandler[];
 };
 
-export type EventHandler = (event: EventType<any>, es: EventSource) => void;
+export type EventHandler = (
+  event: EventType<any>,
+  es: EventSource
+) => void | Promise<void>;
 
 export type Projector = {
   name: string;
@@ -31,34 +34,34 @@ export type CommandHandler<T> = (
 
 export type EventSource = ReturnType<typeof createEventSource>;
 export function createEventSource(config: EventSourceConfig) {
-  const {
+  let {
     command_handlers,
     event_handlers = [],
     projectors = [],
     store: store_promise,
   } = config;
 
-  const startup_promises: ReturnType<Projector['init']>[] = [];
+  let startup_promises: ReturnType<Projector['init']>[] = [];
 
-  const api = {
+  let api = {
     async dispatch<T>(command: CommandType<T>) {
       if (command_handlers[command.type] === undefined) {
         abort(`There is no command handler for the "${command.type}" command`);
       }
 
-      const handle = command_handlers[command.type];
+      let handle = command_handlers[command.type];
       await handle(command, api);
       return command;
     },
 
     async loadEvents<T>() {
-      const store = await store_promise;
+      let store = await store_promise;
       return await store.loadEvents<T>();
     },
 
     async load<T extends Aggregate>(aggregate: T, aggregate_id: string) {
-      const store = await store_promise;
-      const events = await store.load(aggregate_id);
+      let store = await store_promise;
+      let events = await store.load(aggregate_id);
 
       if (events.length <= 0) {
         abort(
@@ -72,10 +75,10 @@ export function createEventSource(config: EventSourceConfig) {
 
     async persist(aggregate: Aggregate) {
       await Promise.all(startup_promises);
-      const store = await store_promise;
+      let store = await store_promise;
 
       // Get all the events that have been produced by the aggregate
-      const events = aggregate.releaseEvents();
+      let events = aggregate.releaseEvents();
 
       // Let's persist all the events
       await store.persist(events);

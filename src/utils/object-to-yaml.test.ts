@@ -2,22 +2,22 @@ import { objectToYaml } from './object-to-yaml';
 import { createError } from './create-error';
 
 it('should be possible to print an object with a single scalar value', () => {
-  const obj = { hello: 'world' };
+  let obj = { hello: 'world' };
   expect(objectToYaml(obj)).toMatchSnapshot();
 });
 
 it('should be possible to print an object with a multiple scalar values', () => {
-  const obj = { hello: 'world', age: 24, interesting: true };
+  let obj = { hello: 'world', age: 24, interesting: true };
   expect(objectToYaml(obj)).toMatchSnapshot();
 });
 
 it('should be possible to print an object with a nested object', () => {
-  const obj = { universe: { hello: 'world' } };
+  let obj = { universe: { hello: 'world' } };
   expect(objectToYaml(obj)).toMatchSnapshot();
 });
 
 it('should be possible to print an object as a yaml like structure (simple case)', () => {
-  const obj = {
+  let obj = {
     id: 'some simple id',
     fields: {
       field_a: ['This field is required', 'This field should be available'],
@@ -39,7 +39,7 @@ it('should be possible to print an error with extra objects to a yaml like struc
 });
 
 it('should be possible to print an object as a yaml like structure (more advanced case)', () => {
-  const obj = {
+  let obj = {
     employees: {
       employee: [
         {

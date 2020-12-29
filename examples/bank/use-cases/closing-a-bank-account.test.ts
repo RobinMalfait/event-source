@@ -5,11 +5,11 @@ import { uuid } from '../../../src/utils/uuid';
 import { closeBankAccountHandler } from '../command-handlers/close-bank-account-handler';
 
 it('should be possible to close a bank account', async () => {
-  const { given, when, then } = createTestEventStore({
+  let { given, when, then } = createTestEventStore({
     [Commands.CLOSE_BANK_ACCOUNT]: closeBankAccountHandler,
   });
 
-  const id = uuid();
+  let id = uuid();
 
   await given([bankAccountHasBeenOpened(id, 'Jane Doe')]);
   await when(closeBankAccount(id));
@@ -17,11 +17,11 @@ it('should be possible to close a bank account', async () => {
 });
 
 it('should not be possible to close a bank account that has already been closed', async () => {
-  const { given, when, then } = createTestEventStore({
+  let { given, when, then } = createTestEventStore({
     [Commands.CLOSE_BANK_ACCOUNT]: closeBankAccountHandler,
   });
 
-  const id = uuid();
+  let id = uuid();
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),

@@ -6,7 +6,7 @@ export async function withdrawMoneyHandler(
   command: WithdrawMoney,
   es: EventSource
 ) {
-  const account = await es.load(new Account(), command.payload.id);
+  let account = await es.load(new Account(), command.payload.id);
 
   account.withdraw(command.payload.amount);
 

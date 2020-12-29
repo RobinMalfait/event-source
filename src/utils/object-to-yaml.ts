@@ -1,6 +1,6 @@
 import yamlify from 'yamlify-object';
 
-const YAMLIFY_OPTIONS = {
+let YAMLIFY_OPTIONS = {
   indent: '  ',
   colors: {
     date: identity,
@@ -23,7 +23,7 @@ export function objectToYaml(object: any): string {
     return objectToYaml({ ...object });
   }
 
-  const output = yamlify(object, YAMLIFY_OPTIONS);
-  const [, ...lines] = output.split('\n');
+  let output = yamlify(object, YAMLIFY_OPTIONS);
+  let [, ...lines] = output.split('\n');
   return lines.join('\n');
 }

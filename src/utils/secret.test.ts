@@ -1,8 +1,8 @@
 import { set, get } from './secret';
 
 it('should be possible to store a "secret" value for a certain object', () => {
-  const my_object = {};
-  const secret = { some: 'secret' };
+  let my_object = {};
+  let secret = { some: 'secret' };
 
   // Store a secret value for this object
   set(my_object, secret);

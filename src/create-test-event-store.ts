@@ -8,9 +8,9 @@ import { CommandType } from './command';
 import { objectToYaml } from './utils/object-to-yaml';
 import { abort } from './utils/abort';
 
-const PLACEHOLDER = Symbol('__placeholder__');
+let PLACEHOLDER = Symbol('__placeholder__');
 
-const info = {
+let info = {
   used_test_event_store_in_test: false,
   called_then_handler: false,
 };
@@ -34,9 +34,7 @@ function cleanThrow(cb: () => unknown, fn: Function) {
   try {
     return cb();
   } catch (e) {
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(e, fn);
-    }
+    if (Error.captureStackTrace) Error.captureStackTrace(e, fn);
     throw e;
   }
 }
@@ -45,8 +43,8 @@ export function createTestEventStore(
   command_handlers: Record<string, CommandHandler<any>>,
   projectors: Projector[] = []
 ) {
-  const db: EventType<any>[] = [];
-  const produced_events: EventType<any>[] = [];
+  let db: EventType<any>[] = [];
+  let produced_events: EventType<any>[] = [];
 
   info.used_test_event_store_in_test = true;
 
@@ -62,7 +60,7 @@ export function createTestEventStore(
     };
   }
 
-  const es = createEventSource({
+  let es = createEventSource({
     store: {
       async load(aggregate_id) {
         return db.filter(event => event.aggregate_id === aggregate_id);
@@ -80,7 +78,7 @@ export function createTestEventStore(
 
   let caught_error: Error;
 
-  const returnValue = {
+  let returnValue = {
     ___: PLACEHOLDER as any, // Expose as type `any` so that it is assignable to values
     given(events: EventType<any>[] = []) {
       db.push(...events);
@@ -126,7 +124,7 @@ export function createTestEventStore(
 
         // Verify each individual event
         events.forEach((event, index) => {
-          const { aggregate_id, event_name, payload } = produced_events[index];
+          let { aggregate_id, event_name, payload } = produced_events[index];
 
           expect(event.aggregate_id).toEqual(aggregate_id);
           expect(event.event_name).toEqual(event_name);
@@ -135,8 +133,8 @@ export function createTestEventStore(
             expect(event.payload).toEqual(payload);
           }
 
-          for (const key in event.payload) {
-            const value = event.payload[key] as any;
+          for (let key in event.payload) {
+            let value = event.payload[key] as any;
 
             if (value === PLACEHOLDER) {
               expect(payload).toHaveProperty(key);

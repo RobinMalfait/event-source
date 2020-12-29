@@ -26,7 +26,7 @@ export class Queue {
   }
 
   async start() {
-    const { state, jobs } = get<QueueSecret>(this);
+    let { state, jobs } = get<QueueSecret>(this);
 
     if (state === State.STARTED || jobs.length <= 0) {
       return;
@@ -35,10 +35,10 @@ export class Queue {
     set<QueueSecret>(this, { state: State.STARTED });
 
     while (jobs.length > 0) {
-      const job = jobs.shift()!;
+      let job = jobs.shift()!;
 
       // Handle the job
-      const settled = Promise.resolve().then(() => job.handle());
+      let settled = Promise.resolve().then(() => job.handle());
 
       // Resolve / reject the job promise wrapper
       await settled.then(job.resolve, job.reject);
@@ -49,7 +49,7 @@ export class Queue {
 
   push(handle: Job['handle']): Promise<unknown> {
     return new Promise((resolve, reject) => {
-      const { jobs } = get<QueueSecret>(this);
+      let { jobs } = get<QueueSecret>(this);
       jobs.push({ handle, resolve, reject });
       setImmediate(() => this.start());
     });
