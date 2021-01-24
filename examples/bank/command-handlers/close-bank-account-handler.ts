@@ -1,4 +1,4 @@
-import { Account } from '../Account';
+import { Account } from '../account';
 import { CloseBankAccount } from '../commands';
 import { EventSource } from '../../../src/create-event-source';
 

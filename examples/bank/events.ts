@@ -1,4 +1,4 @@
-import { Event } from '../../src/Event';
+import { Event } from '../../src/event';
 
 export enum Events {
   BANK_ACCOUNT_HAS_BEEN_OPENED = 'BANK_ACCOUNT_HAS_BEEN_OPENED',

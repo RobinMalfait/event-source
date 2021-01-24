@@ -1,4 +1,4 @@
-import { Command } from '../../src/Command';
+import { Command } from '../../src/command';
 import { uuid } from '../../src/utils/uuid';
 
 export enum Commands {

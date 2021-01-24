@@ -1,4 +1,4 @@
-import { Aggregate } from '../../src/Aggregate';
+import { Aggregate } from '../../src/aggregate';
 import {
   BankAccountHasBeenOpened,
   bankAccountHasBeenOpened,
