@@ -57,7 +57,7 @@ it('should wait to handle the next item if the unit of work returns a promise', 
   q.push(() => {
     fn(2)
 
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         fn(2.5)
         resolve()

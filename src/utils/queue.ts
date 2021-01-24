@@ -44,7 +44,7 @@ export class Queue {
     set<QueueSecret>(this, { state: State.IDLE })
   }
 
-  push(handle: Job['handle']): Promise<unknown> {
+  push(handle: Job['handle']) {
     return new Promise((resolve, reject) => {
       let { jobs } = get<QueueSecret>(this)
       jobs.push({ handle, resolve, reject })
