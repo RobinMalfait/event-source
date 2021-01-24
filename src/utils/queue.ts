@@ -27,10 +27,7 @@ export class Queue {
 
   async start() {
     let { state, jobs } = get<QueueSecret>(this);
-
-    if (state === State.STARTED || jobs.length <= 0) {
-      return;
-    }
+    if (state === State.STARTED || jobs.length <= 0) return;
 
     set<QueueSecret>(this, { state: State.STARTED });
 
@@ -38,7 +35,7 @@ export class Queue {
       let job = jobs.shift()!;
 
       // Handle the job
-      let settled = Promise.resolve().then(() => job.handle());
+      let settled = Promise.resolve().then(job.handle);
 
       // Resolve / reject the job promise wrapper
       await settled.then(job.resolve, job.reject);

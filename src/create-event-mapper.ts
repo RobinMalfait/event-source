@@ -8,6 +8,6 @@ type EventMapper = Record<
 
 export function createEventMapper(mapper: EventMapper) {
   return (event: EventType<any>, es: EventSource) => {
-    return mapper[event.event_name]?.(event, es);
+    return mapper[event.eventName]?.(event, es);
   };
 }

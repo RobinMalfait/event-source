@@ -1,8 +1,8 @@
 import { EventType } from './event';
-import { EventSource, Projector } from './create-event-source';
+import { Projector } from './create-event-source';
 import { Queue } from './utils/queue';
 
-type EventMapper = Record<string, (event: EventType<any>) => void>;
+type EventMapper = Record<string, (event: EventType<unknown>) => void>;
 
 function noop() {}
 
@@ -15,22 +15,20 @@ export function createProjector(
 
   return {
     name,
-    async init(es: EventSource) {
+    async init(es) {
       // Let's run the initializer
-      let initialized = q.push(() => initializer());
+      let initialized = q.push(initializer);
 
       // Re-build the projection from scratch
       let events = await es.loadEvents<any>();
       await Promise.all(
-        events.map(event => {
-          return q.push(() => mapper[event.event_name]?.(event));
-        })
+        events.map(event => q.push(() => mapper[event.eventName]?.(event)))
       );
 
       await initialized;
     },
-    update(event: EventType<any>) {
-      return q.push(() => mapper[event.event_name]?.(event));
+    update(event) {
+      return q.push(() => mapper[event.eventName]?.(event));
     },
   };
 }

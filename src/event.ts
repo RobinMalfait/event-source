@@ -1,23 +1,23 @@
 import { uuid } from './utils/uuid';
 
 export type EventType<T> = {
-  aggregate_id: string;
-  event_id: string;
-  event_name: string;
+  aggregateId: string;
+  eventId: string;
+  eventName: string;
   payload: T;
-  recorded_at: Date;
+  recordedAt: Date;
 };
 
 export function Event<T>(
-  event_name: string,
-  aggregate_id: string,
+  eventName: string,
+  aggregateId: string,
   payload: T
 ): EventType<T> {
   return {
-    aggregate_id,
-    event_id: uuid(),
-    event_name,
+    aggregateId,
+    eventId: uuid(),
+    eventName,
     payload,
-    recorded_at: new Date(),
+    recordedAt: new Date(),
   };
 }

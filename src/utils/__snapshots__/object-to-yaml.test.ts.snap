@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[
-  `should be possible to print an error with extra objects to a yaml like structure 1`
-] = `
+exports[`should be possible to print an error with extra objects to a yaml like structure 1`] = `
 "  with:
     extra:
       properties:
@@ -11,9 +9,7 @@ exports[
         - 3"
 `;
 
-exports[
-  `should be possible to print an object as a yaml like structure (more advanced case) 1`
-] = `
+exports[`should be possible to print an object as a yaml like structure (more advanced case) 1`] = `
 "  employees:
     employee:
       - id: 1
@@ -30,22 +26,18 @@ exports[
         photo: https://pbs.twimg.com/profile_images/664886718559076352/M00cOLrh.jpg"
 `;
 
-exports[
-  `should be possible to print an object as a yaml like structure (simple case) 1`
-] = `
+exports[`should be possible to print an object as a yaml like structure (simple case) 1`] = `
 "  id: some simple id
   fields:
-    field_a:
+    fieldA:
       - This field is required
       - This field should be available
-    field_b:
+    fieldB:
       - This field is required
       - This field should be a number"
 `;
 
-exports[
-  `should be possible to print an object with a multiple scalar values 1`
-] = `
+exports[`should be possible to print an object with a multiple scalar values 1`] = `
 "  hello: world
   age: 24
   interesting: true"
@@ -56,6 +48,4 @@ exports[`should be possible to print an object with a nested object 1`] = `
     hello: world"
 `;
 
-exports[
-  `should be possible to print an object with a single scalar value 1`
-] = `"  hello: world"`;
+exports[`should be possible to print an object with a single scalar value 1`] = `"  hello: world"`;

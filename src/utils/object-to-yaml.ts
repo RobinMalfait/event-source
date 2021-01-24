@@ -18,12 +18,13 @@ function identity<T>(input: T): T {
   return input;
 }
 
-export function objectToYaml(object: any): string {
+export function objectToYaml<T extends Object>(object: T): string {
   if (object instanceof Error) {
     return objectToYaml({ ...object });
   }
 
-  let output = yamlify(object, YAMLIFY_OPTIONS);
-  let [, ...lines] = output.split('\n');
-  return lines.join('\n');
+  return yamlify(object, YAMLIFY_OPTIONS)
+    .split('\n')
+    .slice(1)
+    .join('\n');
 }

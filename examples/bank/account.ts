@@ -61,7 +61,7 @@ export class Account extends Aggregate {
   }
 
   [Events.BANK_ACCOUNT_HAS_BEEN_OPENED](event: BankAccountHasBeenOpened) {
-    this.id = event.aggregate_id;
+    this.id = event.aggregateId;
     this.balance = 0;
     this.state = State.OPEN;
   }

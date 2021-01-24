@@ -20,8 +20,8 @@ it('should be possible to print an object as a yaml like structure (simple case)
   let obj = {
     id: 'some simple id',
     fields: {
-      field_a: ['This field is required', 'This field should be available'],
-      field_b: ['This field is required', 'This field should be a number'],
+      fieldA: ['This field is required', 'This field should be available'],
+      fieldB: ['This field is required', 'This field should be a number'],
     },
   };
 

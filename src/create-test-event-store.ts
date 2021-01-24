@@ -11,18 +11,18 @@ import { abort } from './utils/abort';
 let PLACEHOLDER = Symbol('__placeholder__');
 
 let info = {
-  used_test_event_store_in_test: false,
-  called_then_handler: false,
+  usedTestEventStoreInTest: false,
+  calledThenHandler: false,
 };
 
 if (process.env.NODE_ENV === 'test') {
   beforeEach(() => {
-    info.used_test_event_store_in_test = false;
-    info.called_then_handler = false;
+    info.usedTestEventStoreInTest = false;
+    info.calledThenHandler = false;
   });
 
   afterEach(() => {
-    if (info.used_test_event_store_in_test && !info.called_then_handler) {
+    if (info.usedTestEventStoreInTest && !info.calledThenHandler) {
       abort(
         'It seems like you used `createTestEventStore()`\nwithout using the `await then([expected, events, go, here, ...])`'
       );
@@ -40,13 +40,13 @@ function cleanThrow(cb: () => unknown, fn: Function) {
 }
 
 export function createTestEventStore(
-  command_handlers: Record<string, CommandHandler<any>>,
+  commandHandlers: Record<string, CommandHandler<unknown>>,
   projectors: Projector[] = []
 ) {
   let db: EventType<any>[] = [];
-  let produced_events: EventType<any>[] = [];
+  let producedEvents: EventType<any>[] = [];
 
-  info.used_test_event_store_in_test = true;
+  info.usedTestEventStoreInTest = true;
 
   function createTestRecordingProjector() {
     return {
@@ -55,15 +55,15 @@ export function createTestEventStore(
         db.splice(0);
       },
       update<T>(event: EventType<T>) {
-        produced_events.push(event);
+        producedEvents.push(event);
       },
     };
   }
 
   let es = createEventSource({
     store: {
-      async load(aggregate_id) {
-        return db.filter(event => event.aggregate_id === aggregate_id);
+      async load(aggregateId) {
+        return db.filter(event => event.aggregateId === aggregateId);
       },
       loadEvents() {
         return db;
@@ -72,11 +72,11 @@ export function createTestEventStore(
         db.push(...events);
       },
     },
-    command_handlers,
+    commandHandlers: commandHandlers,
     projectors: [...projectors, createTestRecordingProjector()],
   });
 
-  let caught_error: Error;
+  let caughtError: Error;
 
   let returnValue = {
     ___: PLACEHOLDER as any, // Expose as type `any` so that it is assignable to values
@@ -87,47 +87,44 @@ export function createTestEventStore(
       try {
         return await es.dispatch(command);
       } catch (err) {
-        caught_error = err;
+        caughtError = err;
         return command;
       }
     },
     then<T>(events: EventType<T>[] | Error) {
       // Mark that we called the then function. If not we probably had a
       // successful test that actually didn't test anything!
-      info.called_then_handler = true;
+      info.calledThenHandler = true;
 
       // We expect errors, so let's verify the error
       if (events instanceof Error) {
-        cleanThrow(
-          () => expect(caught_error).toEqual(events),
-          returnValue.then
-        );
+        cleanThrow(() => expect(caughtError).toEqual(events), returnValue.then);
         return;
       }
 
       // At this point, we expected some events, but we caught an error instead.
       // Therefore, we have to re-throw the error
-      if (caught_error) {
-        if (Object.keys(caught_error).length > 0) {
-          caught_error.message = [
+      if (caughtError) {
+        if (Object.keys(caughtError).length > 0) {
+          caughtError.message = [
             'With properties:',
-            `\n${objectToYaml(caught_error)}\n\n---\n\n`,
+            `\n${objectToYaml(caughtError)}\n\n---\n\n`,
           ].join('\n');
         }
 
-        throw caught_error;
+        throw caughtError;
       }
 
       cleanThrow(() => {
         // Verify that the actual events and expected events have the same length
-        expect(events).toHaveLength(produced_events.length);
+        expect(events).toHaveLength(producedEvents.length);
 
         // Verify each individual event
         events.forEach((event, index) => {
-          let { aggregate_id, event_name, payload } = produced_events[index];
+          let { aggregateId, eventName, payload } = producedEvents[index];
 
-          expect(event.aggregate_id).toEqual(aggregate_id);
-          expect(event.event_name).toEqual(event_name);
+          expect(event.aggregateId).toEqual(aggregateId);
+          expect(event.eventName).toEqual(eventName);
 
           if (event.payload === null || event.payload === undefined) {
             expect(event.payload).toEqual(payload);

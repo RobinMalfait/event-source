@@ -4,35 +4,33 @@ import { deepFreeze } from './utils/deep-freeze';
 
 export class Aggregate {
   private version: number = 0;
-  private recorded_events: EventType<unknown>[] = [];
+  private recordedEvents: EventType<unknown>[] = [];
 
   public replayEvents<T>(events: EventType<T>[] = []) {
     return events.reduce((self, event) => self.applyAnEvent(event), this);
   }
 
   private applyAnEvent<T>(event: EventType<T>) {
-    if (process.env.NODE_ENV === 'test') {
-      deepFreeze(event);
-    }
+    if (process.env.NODE_ENV === 'test') deepFreeze(event);
 
-    if ((this as any)[event.event_name] === undefined) {
-      if (event.event_name.match(/^[$A-Z_][0-9A-Z_$]*$/i)) {
+    if ((this as any)[event.eventName] === undefined) {
+      if (event.eventName.match(/^[$A-Z_][0-9A-Z_$]*$/i)) {
         abort(
-          `Aggregate "${this.constructor.name}" has no method:\n\n${event.event_name}(event) {\n\t// Code goes here...\n}`
+          `Aggregate "${this.constructor.name}" has no method:\n\n${event.eventName}(event) {\n\t// Code goes here...\n}`
         );
       } else {
         abort(
-          `Aggregate "${this.constructor.name}" has no method:\n\n['${event.event_name}'](event) {\n\t// Code goes here...\n}`
+          `Aggregate "${this.constructor.name}" has no method:\n\n['${event.eventName}'](event) {\n\t// Code goes here...\n}`
         );
       }
     }
 
     try {
-      (this as any)[event.event_name](event);
+      (this as any)[event.eventName](event);
     } catch (err) {
       console.error(
         `An error occurred inside your "%s" function:\n`,
-        event.event_name,
+        event.eventName,
         err.stack
           .split('\n')
           .map((line: string) => `  ${line}`)
@@ -46,18 +44,18 @@ export class Aggregate {
   }
 
   protected recordThat<T>(event: EventType<T>) {
-    let event_to_store = {
+    let eventToStore = {
       ...event,
       version: this.version,
     };
 
-    this.applyAnEvent(event_to_store);
-    this.recorded_events.push(event_to_store);
+    this.applyAnEvent(eventToStore);
+    this.recordedEvents.push(eventToStore);
 
     return this;
   }
 
   public releaseEvents() {
-    return this.recorded_events.splice(0);
+    return this.recordedEvents.splice(0);
   }
 }

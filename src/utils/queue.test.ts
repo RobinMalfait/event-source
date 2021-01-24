@@ -17,9 +17,7 @@ it('should return a promise when pushing to the Queue', () => {
   let q = new Queue();
   let fn = jest.fn();
 
-  let returnValue = q.push(() => {
-    fn();
-  });
+  let returnValue = q.push(() => fn());
 
   expect(returnValue).toBeInstanceOf(Promise);
 });
@@ -42,17 +40,9 @@ it('should run every item pushed to the queue in order', async () => {
   let q = new Queue();
   let fn = jest.fn();
 
-  q.push(() => {
-    fn(1);
-  });
-
-  q.push(() => {
-    fn(2);
-  });
-
-  await q.push(() => {
-    fn(3);
-  });
+  q.push(() => fn(1));
+  q.push(() => fn(2));
+  await q.push(() => fn(3));
 
   expect(fn.mock.calls).toEqual([[1], [2], [3]]);
 });
@@ -62,9 +52,7 @@ it('should wait to handle the next item if the unit of work returns a promise', 
   let q = new Queue();
   let fn = jest.fn();
 
-  q.push(() => {
-    fn(1);
-  });
+  q.push(() => fn(1));
 
   q.push(() => {
     fn(2);
@@ -77,9 +65,7 @@ it('should wait to handle the next item if the unit of work returns a promise', 
     });
   });
 
-  await q.push(() => {
-    fn(3);
-  });
+  await q.push(() => fn(3));
 
   expect(fn.mock.calls).toEqual([[1], [2], [2.5], [3]]);
 });

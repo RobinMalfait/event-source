@@ -5,26 +5,26 @@ import { abort } from './utils/abort';
 
 export type EventStore = {
   persist<T>(events: EventType<T>[]): void | Promise<void>;
-  load<T>(aggregate_id: string): EventType<T>[] | Promise<EventType<T>[]>;
+  load<T>(aggregateId: string): EventType<T>[] | Promise<EventType<T>[]>;
   loadEvents<T>(): EventType<T>[] | Promise<EventType<T>[]>;
 };
 
 export type EventSourceConfig = {
   store: EventStore | Promise<EventStore>;
-  command_handlers: Record<string, CommandHandler<any>>;
+  commandHandlers: Record<string, CommandHandler<unknown>>;
   projectors?: Projector[];
-  event_handlers?: EventHandler[];
+  eventHandlers?: EventHandler[];
 };
 
 export type EventHandler = (
-  event: EventType<any>,
+  event: EventType<unknown>,
   es: EventSource
-) => void | Promise<void>;
+) => void | Promise<unknown>;
 
 export type Projector = {
   name: string;
-  init: (es: EventSource) => Promise<any> | void;
-  update: (event: EventType<any>) => Promise<any> | void;
+  init: (es: EventSource) => Promise<void> | void;
+  update: (event: EventType<unknown>) => Promise<unknown> | void;
 };
 
 export type CommandHandler<T> = (
@@ -35,38 +35,38 @@ export type CommandHandler<T> = (
 export type EventSource = ReturnType<typeof createEventSource>;
 export function createEventSource(config: EventSourceConfig) {
   let {
-    command_handlers,
-    event_handlers = [],
+    commandHandlers,
+    eventHandlers = [],
     projectors = [],
-    store: store_promise,
+    store: storePromise,
   } = config;
 
-  let startup_promises: ReturnType<Projector['init']>[] = [];
+  let startupPromises: ReturnType<Projector['init']>[] = [];
 
   let api = {
     async dispatch<T>(command: CommandType<T>) {
-      if (command_handlers[command.type] === undefined) {
+      if (commandHandlers[command.type] === undefined) {
         abort(`There is no command handler for the "${command.type}" command`);
       }
 
-      let handle = command_handlers[command.type];
+      let handle = commandHandlers[command.type];
       await handle(command, api);
       return command;
     },
 
     async loadEvents<T>() {
-      let store = await store_promise;
+      let store = await storePromise;
       return await store.loadEvents<T>();
     },
 
-    async load<T extends Aggregate>(aggregate: T, aggregate_id: string) {
-      let store = await store_promise;
-      let events = await store.load(aggregate_id);
+    async load<T extends Aggregate>(aggregate: T, aggregateId: string) {
+      let store = await storePromise;
+      let events = await store.load(aggregateId);
 
       if (events.length <= 0) {
         abort(
-          `Aggregate(${aggregate.constructor.name}) with ID(${aggregate_id}) does not exist.`,
-          { aggregate: aggregate.constructor.name, aggregate_id }
+          `Aggregate(${aggregate.constructor.name}) with ID(${aggregateId}) does not exist.`,
+          { aggregate: aggregate.constructor.name, aggregateId }
         );
       }
 
@@ -74,8 +74,8 @@ export function createEventSource(config: EventSourceConfig) {
     },
 
     async persist(aggregate: Aggregate) {
-      await Promise.all(startup_promises);
-      let store = await store_promise;
+      await Promise.all(startupPromises);
+      let store = await storePromise;
 
       // Get all the events that have been produced by the aggregate
       let events = aggregate.releaseEvents();
@@ -90,16 +90,6 @@ export function createEventSource(config: EventSourceConfig) {
             try {
               await projector.update(event);
             } catch (err) {
-              // abort(
-              //   `An error occurred in one of your projections: ${projector.name}, given an event`,
-              //   {
-              //     projector: projector.name,
-              //     event_id: event.event_id,
-              //     event_name: event.event_name,
-              //     aggregate_id: event.aggregate_id,
-              //     recorded_at: event.recorded_at,
-              //   }
-              // );
               console.error(
                 `An error occurred in one of your projections: ${projector.name}, given an event`,
                 err.stack
@@ -114,7 +104,7 @@ export function createEventSource(config: EventSourceConfig) {
 
         // Run all the event handlers
         await Promise.all(
-          event_handlers.map(async eventHandler => {
+          eventHandlers.map(async eventHandler => {
             try {
               await eventHandler(event, api);
             } catch (err) {
@@ -126,16 +116,6 @@ export function createEventSource(config: EventSourceConfig) {
                   .join('\n')
               );
               throw err;
-              // abort(
-              //   `An error occurred in one of your event handlers: ${eventHandler.name}, given an event`,
-              //   {
-              //     eventHandler: eventHandler.name,
-              //     event_id: event.event_id,
-              //     event_name: event.event_name,
-              //     aggregate_id: event.aggregate_id,
-              //     recorded_at: event.recorded_at,
-              //   }
-              // );
             }
           })
         );
@@ -144,9 +124,7 @@ export function createEventSource(config: EventSourceConfig) {
   };
 
   // Run all projection initializers
-  for (let projector of projectors) {
-    startup_promises.push(projector.init(api));
-  }
+  for (let projector of projectors) startupPromises.push(projector.init(api));
 
   return api;
 }
