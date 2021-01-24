@@ -7,7 +7,8 @@ export class Aggregate {
   private recordedEvents: EventType<unknown>[] = []
 
   public replayEvents<T>(events: EventType<T>[] = []) {
-    return events.reduce((self, event) => self.applyAnEvent(event), this)
+    for (let event of events) this.applyAnEvent(event)
+    return this
   }
 
   private applyAnEvent<T>(event: EventType<T>) {
