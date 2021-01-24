@@ -80,7 +80,7 @@ export function createTestEventStore(
 
   let returnValue = {
     ___: PLACEHOLDER as any, // Expose as type `any` so that it is assignable to values
-    given(events: EventType<any>[] = []) {
+    async given(events: EventType<any>[] = []) {
       db.push(...events)
     },
     async when<T>(command: CommandType<T>) {
@@ -91,7 +91,7 @@ export function createTestEventStore(
         return command
       }
     },
-    then<T>(events: EventType<T>[] | Error) {
+    async then<T>(events: EventType<T>[] | Error) {
       // Mark that we called the then function. If not we probably had a
       // successful test that actually didn't test anything!
       info.calledThenHandler = true
