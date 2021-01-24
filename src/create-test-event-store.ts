@@ -40,7 +40,7 @@ function cleanThrow(cb: () => unknown, fn: Function) {
 }
 
 export function createTestEventStore(
-  commandHandlers: Record<string, CommandHandler<unknown>>,
+  commandHandlers: Record<string, CommandHandler<any>>,
   projectors: Projector[] = []
 ) {
   let db: EventType<any>[] = []
