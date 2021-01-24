@@ -30,16 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      # Skip post-install scripts here, as a malicious
-      # script could steal NODE_AUTH_TOKEN.
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn --forzen-lockfile --ignore-scripts
-
-      # `npm rebuild` will run all those post-install scripts for us.
-      - name: Post Install Scripts
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: npm rebuild && npm run prepare --if-present
+        run: yarn --frozen-lockfile
 
       - name: Build
         run: npm run build
