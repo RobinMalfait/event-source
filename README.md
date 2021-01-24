@@ -1,5 +1,7 @@
 # Event Source
 
+![Node CI](https://github.com/RobinMalfait/event-source/workflows/Node%20CI/badge.svg)
+
 A node library for writing event sourced applications.
 
 ## Usage
