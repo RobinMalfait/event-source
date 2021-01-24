@@ -3,34 +3,32 @@ import { CommandType } from './command'
 import { Aggregate } from './aggregate'
 import { abort } from './utils/abort'
 
-export type EventStore = {
+export interface EventStore {
   persist<T>(events: EventType<T>[]): void | Promise<void>
   load<T>(aggregateId: string): EventType<T>[] | Promise<EventType<T>[]>
   loadEvents<T>(): EventType<T>[] | Promise<EventType<T>[]>
 }
 
-export type EventSourceConfig = {
+export interface EventSourceConfig {
   store: EventStore | Promise<EventStore>
   commandHandlers: Record<string, CommandHandler<unknown>>
   projectors?: Projector[]
   eventHandlers?: EventHandler[]
 }
 
-export type EventHandler = (
-  event: EventType<unknown>,
-  es: EventSource
-) => void | Promise<unknown>
+export interface EventHandler {
+  (event: EventType<unknown>, es: EventSource): void | Promise<unknown>
+}
 
-export type Projector = {
+export interface Projector {
   name: string
   init: (es: EventSource) => Promise<void> | void
   update: (event: EventType<unknown>) => Promise<unknown> | void
 }
 
-export type CommandHandler<T> = (
-  command: CommandType<T>,
-  es: EventSource
-) => void | Promise<void>
+export interface CommandHandler<T> {
+  (command: CommandType<T>, es: EventSource): void | Promise<void>
+}
 
 export type EventSource = ReturnType<typeof createEventSource>
 export function createEventSource(config: EventSourceConfig) {

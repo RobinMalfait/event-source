@@ -1,6 +1,6 @@
 import { uuid } from './utils/uuid'
 
-export type EventType<T> = {
+export interface EventType<T> {
   aggregateId: string
   eventId: string
   eventName: string

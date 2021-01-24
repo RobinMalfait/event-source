@@ -1,12 +1,12 @@
 import { get, set } from './secret'
 
-type Job = {
+interface Job {
   handle: () => void
   resolve: (value: unknown) => unknown
   reject: (value: unknown) => unknown
 }
 
-type QueueSecret = {
+interface QueueSecret {
   jobs: Job[]
   state: State
 }
