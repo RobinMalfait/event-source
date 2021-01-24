@@ -17,12 +17,25 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Use cached node_modules
+        id: cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: nodeModules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            nodeModules-
+
+      # Skip post-install scripts here, as a malicious
+      # script could steal NODE_AUTH_TOKEN.
       - name: Install dependencies
-        # Skip post-install scripts here, as a malicious
-        # script could steal NODE_AUTH_TOKEN.
-        run: npm ci --ignore-scripts
-        # `npm rebuild` will run all those post-install scripts for us.
-      - run: npm rebuild && npm run prepare --if-present
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn --forzen-lockfile --ignore-scripts
+
+      # `npm rebuild` will run all those post-install scripts for us.
+      - name: Post Install Scripts
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm rebuild && npm run prepare --if-present
 
       - name: Build
         run: npm run build
