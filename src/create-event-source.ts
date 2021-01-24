@@ -121,6 +121,16 @@ export function createEventSource(config: EventSourceConfig) {
         )
       }
     },
+
+    async loadPersist<T extends Aggregate>(
+      aggregate: T,
+      aggregateId: string,
+      handle: (aggregate: T) => Promise<void> | void
+    ) {
+      await this.load(aggregate, aggregateId)
+      await handle(aggregate)
+      return this.persist(aggregate)
+    },
   }
 
   // Run all projection initializers

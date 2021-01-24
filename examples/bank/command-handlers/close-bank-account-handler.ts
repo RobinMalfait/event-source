@@ -6,9 +6,7 @@ export async function closeBankAccountHandler(
   command: CloseBankAccount,
   es: EventSource
 ) {
-  let account = await es.load(new Account(), command.payload.id)
-
-  account.close()
-
-  return es.persist(account)
+  return es.loadPersist(new Account(), command.payload.id, account => {
+    account.close()
+  })
 }
