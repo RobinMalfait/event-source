@@ -1,5 +1,5 @@
 export function deepFreeze(object: any) {
-  Object.freeze(object);
+  Object.freeze(object)
 
   for (let prop of Object.getOwnPropertyNames(object)) {
     if (
@@ -9,9 +9,9 @@ export function deepFreeze(object: any) {
         typeof object[prop] === 'function') &&
       !Object.isFrozen(object[prop])
     ) {
-      deepFreeze(object[prop]);
+      deepFreeze(object[prop])
     }
   }
 
-  return object;
+  return object
 }

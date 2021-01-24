@@ -1,20 +1,20 @@
-import { objectToYaml } from './object-to-yaml';
-import { createError } from './create-error';
+import { objectToYaml } from './object-to-yaml'
+import { createError } from './create-error'
 
 it('should be possible to print an object with a single scalar value', () => {
-  let obj = { hello: 'world' };
-  expect(objectToYaml(obj)).toMatchSnapshot();
-});
+  let obj = { hello: 'world' }
+  expect(objectToYaml(obj)).toMatchSnapshot()
+})
 
 it('should be possible to print an object with a multiple scalar values', () => {
-  let obj = { hello: 'world', age: 24, interesting: true };
-  expect(objectToYaml(obj)).toMatchSnapshot();
-});
+  let obj = { hello: 'world', age: 24, interesting: true }
+  expect(objectToYaml(obj)).toMatchSnapshot()
+})
 
 it('should be possible to print an object with a nested object', () => {
-  let obj = { universe: { hello: 'world' } };
-  expect(objectToYaml(obj)).toMatchSnapshot();
-});
+  let obj = { universe: { hello: 'world' } }
+  expect(objectToYaml(obj)).toMatchSnapshot()
+})
 
 it('should be possible to print an object as a yaml like structure (simple case)', () => {
   let obj = {
@@ -23,10 +23,10 @@ it('should be possible to print an object as a yaml like structure (simple case)
       fieldA: ['This field is required', 'This field should be available'],
       fieldB: ['This field is required', 'This field should be a number'],
     },
-  };
+  }
 
-  expect(objectToYaml(obj)).toMatchSnapshot();
-});
+  expect(objectToYaml(obj)).toMatchSnapshot()
+})
 
 it('should be possible to print an error with extra objects to a yaml like structure', () => {
   expect(
@@ -35,8 +35,8 @@ it('should be possible to print an error with extra objects to a yaml like struc
         with: { extra: { properties: [1, 2, 3] } },
       })
     )
-  ).toMatchSnapshot();
-});
+  ).toMatchSnapshot()
+})
 
 it('should be possible to print an object as a yaml like structure (more advanced case)', () => {
   let obj = {
@@ -65,7 +65,7 @@ it('should be possible to print an object as a yaml like structure (more advance
         },
       ],
     },
-  };
+  }
 
-  expect(objectToYaml(obj)).toMatchSnapshot();
-});
+  expect(objectToYaml(obj)).toMatchSnapshot()
+})

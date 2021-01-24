@@ -1,4 +1,4 @@
-let instances = new WeakMap();
+let instances = new WeakMap()
 
 /**
  * This code allows us to store secret/private values for objects. In JavaScript
@@ -14,13 +14,13 @@ let instances = new WeakMap();
 
 export function set<T>(key: object, data: Partial<T>): void {
   if (instances.has(key)) {
-    let original = instances.get(key);
-    for (let key in data) original[key] = data[key];
+    let original = instances.get(key)
+    for (let key in data) original[key] = data[key]
   } else {
-    instances.set(key, data);
+    instances.set(key, data)
   }
 }
 
 export function get<T>(key: object): T {
-  return instances.get(key);
+  return instances.get(key)
 }

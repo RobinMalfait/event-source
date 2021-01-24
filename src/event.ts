@@ -1,12 +1,12 @@
-import { uuid } from './utils/uuid';
+import { uuid } from './utils/uuid'
 
 export type EventType<T> = {
-  aggregateId: string;
-  eventId: string;
-  eventName: string;
-  payload: T;
-  recordedAt: Date;
-};
+  aggregateId: string
+  eventId: string
+  eventName: string
+  payload: T
+  recordedAt: Date
+}
 
 export function Event<T>(
   eventName: string,
@@ -19,5 +19,5 @@ export function Event<T>(
     eventName,
     payload,
     recordedAt: new Date(),
-  };
+  }
 }

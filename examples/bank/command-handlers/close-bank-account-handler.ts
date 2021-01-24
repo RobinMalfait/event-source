@@ -1,14 +1,14 @@
-import { Account } from '../account';
-import { CloseBankAccount } from '../commands';
-import { EventSource } from '../../../src/create-event-source';
+import { Account } from '../account'
+import { CloseBankAccount } from '../commands'
+import { EventSource } from '../../../src/create-event-source'
 
 export async function closeBankAccountHandler(
   command: CloseBankAccount,
   es: EventSource
 ) {
-  let account = await es.load(new Account(), command.payload.id);
+  let account = await es.load(new Account(), command.payload.id)
 
-  account.close();
+  account.close()
 
-  return es.persist(account);
+  return es.persist(account)
 }

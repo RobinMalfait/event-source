@@ -1,4 +1,4 @@
-import yamlify from 'yamlify-object';
+import yamlify from 'yamlify-object'
 
 let YAMLIFY_OPTIONS = {
   indent: '  ',
@@ -12,19 +12,19 @@ let YAMLIFY_OPTIONS = {
     null: identity,
     undefined: identity,
   },
-};
+}
 
 function identity<T>(input: T): T {
-  return input;
+  return input
 }
 
 export function objectToYaml<T extends Object>(object: T): string {
   if (object instanceof Error) {
-    return objectToYaml({ ...object });
+    return objectToYaml({ ...object })
   }
 
   return yamlify(object, YAMLIFY_OPTIONS)
     .split('\n')
     .slice(1)
-    .join('\n');
+    .join('\n')
 }
