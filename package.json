@@ -1,6 +1,6 @@
 {
   "version": "0.0.1",
-  "name": "event-source",
+  "name": "@robinmalfait/event-source",
   "author": {
     "email": "malfait.robin@gmail.com",
     "name": "Robin Malfait"
