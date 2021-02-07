@@ -1,10 +1,9 @@
 {
   "include": ["src", "typings/*.d.ts"],
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "lib": ["esnext"],
-    "importHelpers": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
     "declaration": true,
     "sourceMap": true,
     "rootDir": "./src",
@@ -19,7 +18,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*"]
