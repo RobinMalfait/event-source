@@ -7,7 +7,16 @@ A node library for writing event sourced applications.
 ## Usage
 
 ```js
-import {} from '@placeholder/event-source';
+import {
+  Aggregate,
+  Command,
+  Event,
+  abort,
+  createEventMapper,
+  createEventSource,
+  createProjector,
+  createTestEventStore
+} from '@robinmalfait/event-source';
 ```
 
 ## Local Development
