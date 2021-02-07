@@ -1,7 +1,7 @@
+import { randomUUID } from 'crypto'
 import { createTestEventStore } from '../../../src/create-test-event-store'
 import { Commands, closeBankAccount } from '../commands'
 import { bankAccountHasBeenOpened, bankAccountHasBeenClosed } from '../events'
-import { uuid } from '../../../src/utils/uuid'
 import { closeBankAccountHandler } from '../command-handlers/close-bank-account-handler'
 
 it('should be possible to close a bank account', async () => {
@@ -9,7 +9,7 @@ it('should be possible to close a bank account', async () => {
     [Commands.CLOSE_BANK_ACCOUNT]: closeBankAccountHandler,
   })
 
-  let id = uuid()
+  let id = randomUUID()
 
   await given([bankAccountHasBeenOpened(id, 'Jane Doe')])
   await when(closeBankAccount(id))
@@ -21,7 +21,7 @@ it('should not be possible to close a bank account that has already been closed'
     [Commands.CLOSE_BANK_ACCOUNT]: closeBankAccountHandler,
   })
 
-  let id = uuid()
+  let id = randomUUID()
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),

@@ -3,7 +3,6 @@ export * from './command'
 export * from './event'
 
 export * from './utils/abort'
-export * from './utils/uuid'
 
 export * from './create-event-source'
 

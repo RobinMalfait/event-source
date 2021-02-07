@@ -1,5 +1,6 @@
+import { randomUUID } from 'crypto'
+
 import { Command } from '../../src/command'
-import { uuid } from '../../src/utils/uuid'
 
 export enum Commands {
   OPEN_BANK_ACCOUNT = 'OPEN_BANK_ACCOUNT',
@@ -10,7 +11,7 @@ export enum Commands {
 
 export type OpenBankAccount = ReturnType<typeof openBankAccount>
 export function openBankAccount(name: string) {
-  return Command(Commands.OPEN_BANK_ACCOUNT, { id: uuid(), name })
+  return Command(Commands.OPEN_BANK_ACCOUNT, { id: randomUUID(), name })
 }
 
 export type DepositMoney = ReturnType<typeof depositMoney>

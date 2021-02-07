@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto'
+
 import { createTestEventStore } from '../../../src/create-test-event-store'
 import { withdrawMoneyHandler } from '../command-handlers/withdraw-money-handler'
 import { Commands, withdrawMoney } from '../commands'
@@ -7,14 +9,13 @@ import {
   moneyWasWithdrawn,
   bankAccountHasBeenClosed,
 } from '../events'
-import { uuid } from '../../../src/utils/uuid'
 
 it('should be possible to withdraw money from a bank account', async () => {
   let { given, when, then } = createTestEventStore({
     [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
   })
 
-  let id = uuid()
+  let id = randomUUID()
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),
@@ -29,7 +30,7 @@ it('should not be possible to withdraw money from a bank account that has insuff
     [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
   })
 
-  let id = uuid()
+  let id = randomUUID()
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),
@@ -44,7 +45,7 @@ it('should not be possible to withdraw money from closed a bank account', async 
     [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
   })
 
-  let id = uuid()
+  let id = randomUUID()
 
   await given([
     bankAccountHasBeenOpened(id, 'Jane Doe'),

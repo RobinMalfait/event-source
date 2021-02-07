@@ -20,3 +20,7 @@ declare module 'yamlify-object' {
     }>
   ): string
 }
+
+declare module 'crypto' {
+  export function randomUUID(): string
+}

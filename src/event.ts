@@ -1,4 +1,4 @@
-import { uuid } from './utils/uuid'
+import { randomUUID } from 'crypto'
 
 export interface EventType<T> {
   aggregateId: string
@@ -15,7 +15,7 @@ export function Event<T>(
 ): EventType<T> {
   return {
     aggregateId,
-    eventId: uuid(),
+    eventId: randomUUID(),
     eventName,
     payload,
     recordedAt: new Date(),
