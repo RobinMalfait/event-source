@@ -6,6 +6,7 @@ export interface EventType<T> {
   eventName: string
   payload: T
   recordedAt: Date
+  version: number
 }
 
 export function Event<T>(
@@ -19,5 +20,6 @@ export function Event<T>(
     eventName,
     payload,
     recordedAt: new Date(),
+    version: -1,
   }
 }

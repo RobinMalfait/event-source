@@ -9,5 +9,6 @@ it('should return an event object', () => {
     eventId: expect.stringContaining('-4'), // A uuid
     payload: { some: 'payload' },
     recordedAt: expect.any(Date),
+    version: expect.any(Number),
   })
 })
