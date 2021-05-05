@@ -1,14 +1,9 @@
 import { Aggregate } from '../../src/aggregate'
 import {
-  BankAccountHasBeenOpened,
   bankAccountHasBeenOpened,
-  Events,
   moneyWasDeposited,
-  MoneyWasDeposited,
   moneyWasWithdrawn,
-  MoneyWasWithdrawn,
   bankAccountHasBeenClosed,
-  BankAccountHasBeenClosed,
 } from './events'
 import { abort } from '../../src/utils/abort'
 
@@ -17,15 +12,41 @@ enum State {
   CLOSED,
 }
 
+// enum ActionTypes {
+//   A = 'MONEY_WAS_DEPOSITED',
+//   B = 'MONEY_WAS_WITHDRAWN',
+//   C = 'BANK_ACCOUNT_HAS_BEEN_OPENED',
+// }
+//
+// type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
+//
+// type Actions =
+//   | ({ type: ActionTypes.A } & MoneyWasDeposited)
+//   | ({ type: ActionTypes.B } & MoneyWasWithdrawn)
+//   | ({ type: ActionTypes.C } & BankAccountHasBeenOpened)
+//
+// let reducers: {
+//   [P in ActionTypes]: (event: Expand<Extract<Actions, { type: P }>>) => void
+// } = {
+//   [Events.MONEY_WAS_DEPOSITED](event) {
+//     console.log({ event })
+//   },
+//   [Events.MONEY_WAS_WITHDRAWN](event) {
+//     console.log({ event })
+//   },
+//   [Events.BANK_ACCOUNT_HAS_BEEN_OPENED](event) {
+//     console.log({ event })
+//   },
+// }
+// console.log({ reducers })
+
 export class Account extends Aggregate {
   private id: string
   private balance: number
   private state: State
 
   static open(id: string, name: string) {
-    let account = new Account()
-    account.recordThat(bankAccountHasBeenOpened(id, name))
-    return account
+    return new Account().recordThat(bankAccountHasBeenOpened(id, name))
   }
 
   deposit(amount: number) {
@@ -60,21 +81,25 @@ export class Account extends Aggregate {
     this.recordThat(bankAccountHasBeenClosed(this.id))
   }
 
-  [Events.BANK_ACCOUNT_HAS_BEEN_OPENED](event: BankAccountHasBeenOpened) {
+  BANK_ACCOUNT_HAS_BEEN_OPENED(
+    event: ReturnType<typeof bankAccountHasBeenOpened>
+  ) {
     this.id = event.aggregateId
     this.balance = 0
     this.state = State.OPEN
   }
 
-  [Events.MONEY_WAS_DEPOSITED](event: MoneyWasDeposited) {
+  MONEY_WAS_DEPOSITED(event: ReturnType<typeof moneyWasDeposited>) {
     this.balance += event.payload.amount
   }
 
-  [Events.MONEY_WAS_WITHDRAWN](event: MoneyWasWithdrawn) {
+  MONEY_WAS_WITHDRAWN(event: ReturnType<typeof moneyWasWithdrawn>) {
     this.balance -= event.payload.amount
   }
 
-  [Events.BANK_ACCOUNT_HAS_BEEN_CLOSED](_event: BankAccountHasBeenClosed) {
+  BANK_ACCOUNT_HAS_BEEN_CLOSED(
+    _event: ReturnType<typeof bankAccountHasBeenClosed>
+  ) {
     this.state = State.CLOSED
   }
 }

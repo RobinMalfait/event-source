@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 
 import { createTestEventStore } from '../../../src/create-test-event-store'
 import { withdrawMoneyHandler } from '../command-handlers/withdraw-money-handler'
-import { Commands, withdrawMoney } from '../commands'
+import { withdrawMoney } from '../commands'
 import {
   bankAccountHasBeenOpened,
   moneyWasDeposited,
@@ -12,7 +12,7 @@ import {
 
 it('should be possible to withdraw money from a bank account', async () => {
   let { given, when, then } = createTestEventStore({
-    [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
+    WITHDRAW_MONEY: withdrawMoneyHandler,
   })
 
   let id = randomUUID()
@@ -27,7 +27,7 @@ it('should be possible to withdraw money from a bank account', async () => {
 
 it('should not be possible to withdraw money from a bank account that has insufficient funds', async () => {
   let { given, when, then } = createTestEventStore({
-    [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
+    WITHDRAW_MONEY: withdrawMoneyHandler,
   })
 
   let id = randomUUID()
@@ -42,7 +42,7 @@ it('should not be possible to withdraw money from a bank account that has insuff
 
 it('should not be possible to withdraw money from closed a bank account', async () => {
   let { given, when, then } = createTestEventStore({
-    [Commands.WITHDRAW_MONEY]: withdrawMoneyHandler,
+    WITHDRAW_MONEY: withdrawMoneyHandler,
   })
 
   let id = randomUUID()

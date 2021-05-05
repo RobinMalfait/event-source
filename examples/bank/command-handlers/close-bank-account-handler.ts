@@ -1,9 +1,9 @@
 import { Account } from '../account'
-import { CloseBankAccount } from '../commands'
+import { closeBankAccount } from '../commands'
 import { EventSource } from '../../../src/create-event-source'
 
 export async function closeBankAccountHandler(
-  command: CloseBankAccount,
+  command: ReturnType<typeof closeBankAccount>,
   es: EventSource
 ) {
   return es.loadPersist(new Account(), command.payload.id, account => {

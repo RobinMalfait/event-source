@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 
 import { createTestEventStore } from '../../../src/create-test-event-store'
 import { depositMoneyHandler } from '../command-handlers/deposit-money-handler'
-import { Commands, depositMoney } from '../commands'
+import { depositMoney } from '../commands'
 import {
   bankAccountHasBeenOpened,
   moneyWasDeposited,
@@ -11,7 +11,7 @@ import {
 
 it('should be possible to deposit money on a bank account', async () => {
   let { given, when, then } = createTestEventStore({
-    [Commands.DEPOSIT_MONEY]: depositMoneyHandler,
+    DEPOSIT_MONEY: depositMoneyHandler,
   })
 
   let id = randomUUID()
@@ -23,7 +23,7 @@ it('should be possible to deposit money on a bank account', async () => {
 
 it('should not be possible to deposit money to closed a bank account', async () => {
   let { given, when, then } = createTestEventStore({
-    [Commands.DEPOSIT_MONEY]: depositMoneyHandler,
+    DEPOSIT_MONEY: depositMoneyHandler,
   })
 
   let id = randomUUID()

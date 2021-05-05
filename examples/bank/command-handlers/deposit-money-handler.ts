@@ -1,9 +1,9 @@
 import { Account } from '../account'
-import { DepositMoney } from '../commands'
+import { depositMoney } from '../commands'
 import { EventSource } from '../../../src/create-event-source'
 
 export async function depositMoneyHandler(
-  command: DepositMoney,
+  command: ReturnType<typeof depositMoney>,
   es: EventSource
 ) {
   return es.loadPersist(new Account(), command.payload.id, account => {
