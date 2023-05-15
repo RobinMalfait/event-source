@@ -15,8 +15,8 @@ import {
   createEventMapper,
   createEventSource,
   createProjector,
-  createTestEventStore
-} from '@robinmalfait/event-source';
+  createTestEventStore,
+} from '@robinmalfait/event-source'
 ```
 
 ## Local Development

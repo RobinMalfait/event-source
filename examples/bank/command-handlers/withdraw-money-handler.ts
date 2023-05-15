@@ -6,7 +6,7 @@ export async function withdrawMoneyHandler(
   command: ReturnType<typeof withdrawMoney>,
   es: EventSource
 ) {
-  return es.loadPersist(new Account(), command.payload.id, account => {
+  return es.loadPersist(new Account(), command.payload.id, (account) => {
     account.withdraw(command.payload.amount)
   })
 }

@@ -63,7 +63,7 @@ export function createTestEventStore(
   let es = createEventSource({
     store: {
       async load(aggregateId) {
-        return db.filter(event => event.aggregateId === aggregateId)
+        return db.filter((event) => event.aggregateId === aggregateId)
       },
       loadEvents() {
         return db

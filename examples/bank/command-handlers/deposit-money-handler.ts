@@ -6,7 +6,7 @@ export async function depositMoneyHandler(
   command: ReturnType<typeof depositMoney>,
   es: EventSource
 ) {
-  return es.loadPersist(new Account(), command.payload.id, account => {
+  return es.loadPersist(new Account(), command.payload.id, (account) => {
     account.deposit(command.payload.amount)
   })
 }

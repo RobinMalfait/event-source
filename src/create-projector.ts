@@ -27,10 +27,8 @@ export function createProjector<Ctx, TPayload, TEventName>(
       // Re-build the projection from scratch
       let events = await es.loadEvents<EventType<TPayload, TEventName>>()
       await Promise.all(
-        events.map(event =>
-          q.push(() =>
-            mapper[event.eventName]?.((event as unknown) as any, ctx)
-          )
+        events.map((event) =>
+          q.push(() => mapper[event.eventName]?.(event as unknown as any, ctx))
         )
       )
     },

@@ -46,7 +46,7 @@ export function createEventSource(config: EventSourceConfig) {
   let api = {
     async resetProjections() {
       await Promise.all(startupPromises)
-      await Promise.all(projectors.map(projector => projector.init(api)))
+      await Promise.all(projectors.map((projector) => projector.init(api)))
     },
     async dispatch<T>(command: CommandType<T>) {
       if (commandHandlers[command.type] === undefined) {
@@ -90,7 +90,7 @@ export function createEventSource(config: EventSourceConfig) {
       for (let event of events) {
         // Run all the projectors
         await Promise.all(
-          projectors.map(async projector => {
+          projectors.map(async (projector) => {
             try {
               await projector.update(event)
             } catch (err) {
@@ -108,7 +108,7 @@ export function createEventSource(config: EventSourceConfig) {
 
         // Run all the event handlers
         await Promise.all(
-          eventHandlers.map(async eventHandler => {
+          eventHandlers.map(async (eventHandler) => {
             try {
               await eventHandler(event, api)
             } catch (err) {

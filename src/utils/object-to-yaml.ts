@@ -23,8 +23,5 @@ export function objectToYaml<T extends Object>(object: T): string {
     return objectToYaml({ ...object })
   }
 
-  return yamlify(object, YAMLIFY_OPTIONS)
-    .split('\n')
-    .slice(1)
-    .join('\n')
+  return yamlify(object, YAMLIFY_OPTIONS).split('\n').slice(1).join('\n')
 }

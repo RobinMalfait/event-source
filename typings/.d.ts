@@ -1,5 +1,5 @@
 declare module 'yamlify-object' {
-  export default function<T extends Object>(
+  export default function <T extends Object>(
     input: T,
     options: Partial<{
       indent: string
