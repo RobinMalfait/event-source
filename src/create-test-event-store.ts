@@ -34,7 +34,8 @@ function cleanThrow(cb: () => unknown, fn: Function) {
   try {
     return cb()
   } catch (e) {
-    if (Error.captureStackTrace) Error.captureStackTrace(e, fn)
+    if (Error.captureStackTrace && e instanceof Error)
+      Error.captureStackTrace(e, fn)
     throw e
   }
 }
@@ -63,7 +64,7 @@ export function createTestEventStore(
   let es = createEventSource({
     store: {
       async load(aggregateId) {
-        return db.filter((event) => event.aggregateId === aggregateId)
+        return db.filter(event => event.aggregateId === aggregateId)
       },
       loadEvents() {
         return db
@@ -91,7 +92,10 @@ export function createTestEventStore(
           typeof command === 'function' ? command() : command
         )
       } catch (err) {
-        caughtError = err
+        if (err instanceof Error) {
+          caughtError = err
+        }
+        // @ts-ignore
         return err
       }
     },

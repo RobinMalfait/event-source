@@ -31,14 +31,16 @@ export class Aggregate {
     try {
       ;(this as any)[event.eventName](event)
     } catch (err) {
-      console.error(
-        `An error occurred inside your "%s" function:\n`,
-        event.eventName,
-        err.stack
-          .split('\n')
-          .map((line: string) => `  ${line}`)
-          .join('\n')
-      )
+      if (err instanceof Error) {
+        console.error(
+          `An error occurred inside your "%s" function:\n`,
+          event.eventName,
+          err.stack
+            ?.split('\n')
+            .map((line: string) => `  ${line}`)
+            .join('\n')
+        )
+      }
     } finally {
       this.version++
     }
