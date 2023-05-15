@@ -23,14 +23,14 @@ import {
 
 Below is a list of commands you will probably find useful.
 
-### `npm start` or `yarn start`
+### `pnpm start`
 
 Start the build in watch mode, which makes it easy to make incremental builds.
 
-### `npm run build` or `yarn build`
+### `pnpm build`
 
 Build the package!
 
-### `npm test` or `yarn test`
+### `pnpm test`
 
 Runn all the tests!
