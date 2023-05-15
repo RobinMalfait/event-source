@@ -31,7 +31,7 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.(t|j)sx?$": "@swc/jest"
+      "\\.ts$": "@swc/jest"
     }
   },
   "devDependencies": {
