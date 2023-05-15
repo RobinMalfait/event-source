@@ -45,6 +45,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "yamlify-object": "^0.5.1"
+    "yamlify-object": "^1.0.0"
   }
 }
