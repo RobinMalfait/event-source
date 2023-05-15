@@ -1,4 +1,4 @@
-import { set, get } from './secret'
+import { set, get } from '~/utils/secret'
 
 it('should be possible to store a "secret" value for a certain object', () => {
   let myObject = {}

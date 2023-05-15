@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
+import { createTestEventStore } from '@robinmalfait/event-source'
 
-import { createTestEventStore } from '../../../src/create-test-event-store'
 import { withdrawMoneyHandler } from '../command-handlers/withdraw-money-handler'
 import { withdrawMoney } from '../commands'
 import {

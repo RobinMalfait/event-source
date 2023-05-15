@@ -1,4 +1,5 @@
-import { createTestEventStore } from '../../../src/create-test-event-store'
+import { createTestEventStore } from '@robinmalfait/event-source'
+
 import { openBankAccountHandler } from '../command-handlers/open-bank-account-handler'
 import { openBankAccount } from '../commands'
 import { bankAccountHasBeenOpened } from '../events'

@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto'
-
-import { Event } from './event'
+import { Event } from '~/event'
 
 it('should return an event object', () => {
   expect(Event('my-event', randomUUID(), { some: 'payload' })).toEqual({

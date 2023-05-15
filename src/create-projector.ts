@@ -1,6 +1,6 @@
-import { EventType } from './event'
-import { Projector } from './create-event-source'
-import { Queue } from './utils/queue'
+import { EventType } from '~/event'
+import { Projector } from '~/create-event-source'
+import { Queue } from '~/utils/queue'
 
 type EventMapper<Ctx, TPayload, TEventName> = Record<
   string,

@@ -1,6 +1,6 @@
-import { EventType } from './event'
-import { abort } from './utils/abort'
-import { deepFreeze } from './utils/deep-freeze'
+import { EventType } from '~/event'
+import { abort } from '~/utils/abort'
+import { deepFreeze } from '~//utils/deep-freeze'
 
 let env = { NODE_ENV: process.env.NODE_ENV }
 

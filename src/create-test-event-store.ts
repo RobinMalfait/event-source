@@ -2,11 +2,11 @@ import {
   CommandHandler,
   createEventSource,
   Projector,
-} from './create-event-source'
-import { EventType } from './event'
-import { CommandType } from './command'
-import { objectToYaml } from './utils/object-to-yaml'
-import { abort } from './utils/abort'
+} from '~/create-event-source'
+import { EventType } from '~/event'
+import { CommandType } from '~/command'
+import { objectToYaml } from '~/utils/object-to-yaml'
+import { abort } from '~/utils/abort'
 
 let PLACEHOLDER = Symbol('__placeholder__')
 
@@ -64,7 +64,7 @@ export function createTestEventStore(
   let es = createEventSource({
     store: {
       async load(aggregateId) {
-        return db.filter(event => event.aggregateId === aggregateId)
+        return db.filter((event) => event.aggregateId === aggregateId)
       },
       loadEvents() {
         return db

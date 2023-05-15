@@ -1,5 +1,5 @@
-import { objectToYaml } from './object-to-yaml'
-import { createError } from './create-error'
+import { objectToYaml } from '~/utils/object-to-yaml'
+import { createError } from '~/utils/create-error'
 
 it('should be possible to print an object with a single scalar value', () => {
   let obj = { hello: 'world' }

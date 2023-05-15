@@ -1,4 +1,4 @@
-import { get, set } from './secret'
+import { get, set } from '~/utils/secret'
 
 interface Job {
   handle: () => void

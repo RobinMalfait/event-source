@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto'
-
-import { Command } from '../../src/command'
+import { Command } from '@robinmalfait/event-source'
 
 export function openBankAccount(name: string) {
   return Command('OPEN_BANK_ACCOUNT', { id: randomUUID(), name })

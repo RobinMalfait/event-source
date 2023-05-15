@@ -1,4 +1,4 @@
-import { deepFreeze } from './deep-freeze'
+import { deepFreeze } from '~/utils/deep-freeze'
 
 it('should be possible to freeze a shallow object', () => {
   let obj = deepFreeze({ a: 1 })

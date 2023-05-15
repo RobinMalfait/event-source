@@ -1,28 +1,17 @@
 {
-  "include": ["src", "typings/*.d.ts"],
   "compilerOptions": {
-    "target": "ESNext",
     "module": "ESNext",
-    "lib": ["ESNext"],
-    "declaration": true,
-    "sourceMap": true,
-    "rootDir": "./src",
+    "target": "ESNext",
+    "moduleResolution": "node",
     "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": false,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "Node",
-    "baseUrl": "./",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
     "paths": {
-      "*": ["src/*", "node_modules/*"]
-    },
-    "esModuleInterop": true
-  }
+      "~/*": ["src/*"],
+      "@robinmalfait/event-source": ["src/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "typings/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }

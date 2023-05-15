@@ -1,5 +1,5 @@
-import { EventType } from './event'
-import { EventSource } from './create-event-source'
+import { EventType } from '~/event'
+import { EventSource } from '~/create-event-source'
 
 type EventMapper = Record<
   string,

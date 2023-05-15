@@ -1,4 +1,4 @@
-import { Event } from '../../src/event'
+import { Event } from '@robinmalfait/event-source'
 
 export function bankAccountHasBeenOpened(id: string, name: string) {
   return Event('BANK_ACCOUNT_HAS_BEEN_OPENED', id, { name })

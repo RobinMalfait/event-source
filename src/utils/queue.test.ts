@@ -1,4 +1,4 @@
-import { Queue } from './queue'
+import { Queue } from '~/utils/queue'
 
 it('should be possible to create a Queue instance', () => {
   expect(new Queue()).toBeInstanceOf(Queue)

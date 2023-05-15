@@ -1,4 +1,4 @@
-import { createError } from './create-error'
+import { createError } from '~/utils/create-error'
 
 it('should be possible to create an error', () => {
   let error = createError('My Error')

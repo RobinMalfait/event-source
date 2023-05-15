@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto'
-import { createTestEventStore } from '../../../src/create-test-event-store'
+import { createTestEventStore } from '@robinmalfait/event-source'
+
 import { closeBankAccount } from '../commands'
 import { bankAccountHasBeenOpened, bankAccountHasBeenClosed } from '../events'
 import { closeBankAccountHandler } from '../command-handlers/close-bank-account-handler'

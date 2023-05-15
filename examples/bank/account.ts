@@ -1,11 +1,10 @@
-import { Aggregate } from '../../src/aggregate'
+import { abort, Aggregate } from '@robinmalfait/event-source'
 import {
   bankAccountHasBeenOpened,
   moneyWasDeposited,
   moneyWasWithdrawn,
   bankAccountHasBeenClosed,
 } from './events'
-import { abort } from '../../src/utils/abort'
 
 enum State {
   OPEN,

@@ -1,6 +1,7 @@
+import { EventSource } from '@robinmalfait/event-source'
+
 import { Account } from '../account'
 import { closeBankAccount } from '../commands'
-import { EventSource } from '../../../src/create-event-source'
 
 export async function closeBankAccountHandler(
   command: ReturnType<typeof closeBankAccount>,

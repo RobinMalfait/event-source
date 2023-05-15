@@ -1,6 +1,7 @@
+import { EventSource } from '@robinmalfait/event-source'
+
 import { Account } from '../account'
 import { depositMoney } from '../commands'
-import { EventSource } from '../../../src/create-event-source'
 
 export async function depositMoneyHandler(
   command: ReturnType<typeof depositMoney>,
