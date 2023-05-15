@@ -1,8 +1,10 @@
 export * from './aggregate'
 export * from './command'
 export * from './event'
+export * from './types'
 
 export * from './utils/abort'
+export * from './utils/object-to-yaml'
 
 export * from './create-event-source'
 

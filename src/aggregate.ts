@@ -2,17 +2,19 @@ import { EventType } from './event'
 import { abort } from './utils/abort'
 import { deepFreeze } from './utils/deep-freeze'
 
+let env = { NODE_ENV: process.env.NODE_ENV }
+
 export class Aggregate {
   private version: number = 0
-  private recordedEvents: EventType<unknown>[] = []
+  private recordedEvents: EventType<unknown, any>[] = []
 
-  public replayEvents<T>(events: EventType<T>[] = []) {
+  public replayEvents<T>(events: EventType<T, any>[] = []) {
     for (let event of events) this.applyAnEvent(event)
     return this
   }
 
-  private applyAnEvent<T>(event: EventType<T>) {
-    if (process.env.NODE_ENV === 'test') deepFreeze(event)
+  private applyAnEvent<T>(event: EventType<T, any>) {
+    if (env.NODE_ENV === 'test') deepFreeze(event)
 
     if ((this as any)[event.eventName] === undefined) {
       if (event.eventName.match(/^[$A-Z_][0-9A-Z_$]*$/i)) {
@@ -44,7 +46,7 @@ export class Aggregate {
     return this
   }
 
-  protected recordThat<T>(event: EventType<T>) {
+  protected recordThat<T>(event: EventType<T, any>) {
     let eventToStore = {
       ...event,
       version: this.version,

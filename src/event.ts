@@ -1,19 +1,19 @@
 import { randomUUID } from 'crypto'
 
-export interface EventType<T> {
+export interface EventType<T, N> {
   aggregateId: string
   eventId: string
-  eventName: string
+  eventName: N
   payload: T
   recordedAt: Date
   version: number
 }
 
-export function Event<T>(
-  eventName: string,
+export function Event<T, N>(
+  eventName: N,
   aggregateId: string,
   payload: T
-): EventType<T> {
+): EventType<T, N> {
   return {
     aggregateId,
     eventId: randomUUID(),

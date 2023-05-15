@@ -43,8 +43,8 @@ export function createTestEventStore(
   commandHandlers: Record<string, CommandHandler<any>>,
   projectors: Projector[] = []
 ) {
-  let db: EventType<any>[] = []
-  let producedEvents: EventType<any>[] = []
+  let db: EventType<any, any>[] = []
+  let producedEvents: EventType<any, any>[] = []
 
   info.usedTestEventStoreInTest = true
 
@@ -54,7 +54,7 @@ export function createTestEventStore(
       init() {
         db.splice(0)
       },
-      update<T>(event: EventType<T>) {
+      update<T>(event: EventType<T, any>) {
         producedEvents.push(event)
       },
     }
@@ -80,18 +80,22 @@ export function createTestEventStore(
 
   let returnValue = {
     ___: PLACEHOLDER as any, // Expose as type `any` so that it is assignable to values
-    async given(events: EventType<any>[] = []) {
+    async given(events: EventType<any, any>[] = []) {
       db.push(...events)
     },
-    async when<T>(command: CommandType<T>) {
+    async when<T>(
+      command: CommandType<T> | (() => CommandType<T>)
+    ): Promise<CommandType<T>> | never {
       try {
-        return await es.dispatch(command)
+        return await es.dispatch(
+          typeof command === 'function' ? command() : command
+        )
       } catch (err) {
         caughtError = err
-        return command
+        return err
       }
     },
-    async then<T>(events: EventType<T>[] | Error) {
+    async then<T>(events: EventType<T, any>[] | Error) {
       // Mark that we called the then function. If not we probably had a
       // successful test that actually didn't test anything!
       info.calledThenHandler = true
@@ -120,7 +124,7 @@ export function createTestEventStore(
         expect(events).toHaveLength(producedEvents.length)
 
         // Verify each individual event
-        events.forEach((event, index) => {
+        for (let [index, event] of events.entries()) {
           let { aggregateId, eventName, payload } = producedEvents[index]
 
           expect(event.aggregateId).toEqual(aggregateId)
@@ -140,7 +144,7 @@ export function createTestEventStore(
               expect(payload[key]).toEqual(value)
             }
           }
-        })
+        }
       }, returnValue.then)
     },
   }

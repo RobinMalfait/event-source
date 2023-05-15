@@ -3,31 +3,33 @@ import { CommandType } from './command'
 import { Aggregate } from './aggregate'
 import { abort } from './utils/abort'
 
+type MaybePromise<T> = T | Promise<T>
+
 export interface EventStore {
-  persist<T>(events: EventType<T>[]): void | Promise<void>
-  load<T>(aggregateId: string): EventType<T>[] | Promise<EventType<T>[]>
-  loadEvents<T>(): EventType<T>[] | Promise<EventType<T>[]>
+  persist<T>(events: EventType<T, unknown>[]): MaybePromise<void>
+  load<T>(aggregateId: string): MaybePromise<EventType<T, string>[]>
+  loadEvents<T>(): MaybePromise<EventType<T, string>[]>
 }
 
-export interface EventSourceConfig {
+export interface EventSourceConfig<Handlers = any> {
   store: EventStore | Promise<EventStore>
-  commandHandlers: Record<string, CommandHandler<unknown>>
+  commandHandlers: Record<string, CommandHandler<Handlers>>
   projectors?: Projector[]
   eventHandlers?: EventHandler[]
 }
 
 export interface EventHandler {
-  (event: EventType<unknown>, es: EventSource): void | Promise<unknown>
+  (event: EventType<unknown, string>, es: EventSource): MaybePromise<unknown>
 }
 
-export interface Projector {
+export interface Projector<TPayload = any, TEventName = any> {
   name: string
-  init: (es: EventSource) => Promise<void> | void
-  update: (event: EventType<unknown>) => Promise<unknown> | void
+  init: (es: EventSource) => MaybePromise<void>
+  update: (event: EventType<TPayload, TEventName>) => MaybePromise<unknown>
 }
 
 export interface CommandHandler<T> {
-  (command: CommandType<T>, es: EventSource): void | Promise<void>
+  (command: CommandType<T>, es: EventSource): MaybePromise<void>
 }
 
 export type EventSource = ReturnType<typeof createEventSource>
@@ -42,6 +44,10 @@ export function createEventSource(config: EventSourceConfig) {
   let startupPromises: ReturnType<Projector['init']>[] = []
 
   let api = {
+    async resetProjections() {
+      await Promise.all(startupPromises)
+      await Promise.all(projectors.map(projector => projector.init(api)))
+    },
     async dispatch<T>(command: CommandType<T>) {
       if (commandHandlers[command.type] === undefined) {
         abort(`There is no command handler for the "${command.type}" command`)
