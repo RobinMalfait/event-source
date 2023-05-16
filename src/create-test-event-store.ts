@@ -139,13 +139,22 @@ export function createTestEventStore(
           let { aggregateId, eventName, payload } =
             projector.producedEvents[index]
 
-          expect(event.aggregateId).toEqual(aggregateId)
+          // Verify aggregateId
+          if ((event.aggregateId as any) === PLACEHOLDER) {
+            throw new Error('Expected an `aggregateId`, but got `___` instead.')
+          } else {
+            expect(event.aggregateId).toEqual(aggregateId)
+          }
+
+          // Verify event name
           expect(event.eventName).toEqual(eventName)
 
+          // Verify payload
           if (event.payload === null || event.payload === undefined) {
             expect(event.payload).toEqual(payload)
           }
 
+          // Verify each individual payload property
           for (let key in event.payload) {
             let value = event.payload[key] as any
 
