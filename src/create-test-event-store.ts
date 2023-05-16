@@ -105,16 +105,19 @@ export function createTestEventStore(
         return err
       }
     },
-    async then<T>(events: EventType<T, any>[] | Error) {
+    async then<T>(expectation: EventType<T, any>[] | Error) {
       // Mark that we called the then function. If not we probably had a
       // successful test that actually didn't test anything!
       info.calledThenHandler = true
 
       // We expect errors, so let's verify the error
-      if (events instanceof Error) {
-        cleanThrow(() => expect(caughtError).toEqual(events), returnValue.then)
+      if (expectation instanceof Error) {
+        let error = expectation
+        cleanThrow(() => expect(caughtError).toEqual(error), returnValue.then)
         return
       }
+
+      let events = expectation
 
       // At this point, we expected some events, but we caught an error instead.
       // Therefore, we have to re-throw the error
