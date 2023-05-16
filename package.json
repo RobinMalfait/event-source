@@ -17,7 +17,7 @@
   "license": "MIT",
   "scripts": {
     "start": "pnpm build --watch",
-    "build": "tsup ./src/index.ts --format esm --clean --minify --dts",
+    "build": "tsup ./src/index.ts --format esm,cjs --clean --minify --dts",
     "test": "jest",
     "tdd": "jest --watchAll",
     "format": "prettier --write .",
