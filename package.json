@@ -9,7 +9,7 @@
     "name": "Robin Malfait"
   },
   "main": "dist/index.js",
-  "module": "dist/eventsource.esm.js",
+  "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
