@@ -63,24 +63,22 @@ export function createTestEventStore(
 ) {
   info.usedTestEventStoreInTest = true
 
-  let testRecordingProjector = new TestRecordingProjector()
+  let projector = new TestRecordingProjector()
 
   let es = createEventSource({
     store: {
       async load(aggregateId) {
-        return testRecordingProjector.db.filter(
-          (event) => event.aggregateId === aggregateId
-        )
+        return projector.db.filter((event) => event.aggregateId === aggregateId)
       },
       loadEvents() {
-        return testRecordingProjector.db
+        return projector.db
       },
       persist(events) {
-        testRecordingProjector.db.push(...events)
+        projector.db.push(...events)
       },
     },
     commandHandlers: commandHandlers,
-    projectors: [...projectors, testRecordingProjector],
+    projectors: [...projectors, projector],
   })
 
   let caughtError: Error
@@ -88,7 +86,7 @@ export function createTestEventStore(
   let returnValue = {
     ___: PLACEHOLDER as any, // Expose as type `any` so that it is assignable to values
     async given(events: EventType<any, any>[] = []) {
-      testRecordingProjector.db.push(...events)
+      projector.db.push(...events)
     },
     async when<T>(
       command: CommandType<T> | (() => CommandType<T>)
@@ -134,14 +132,12 @@ export function createTestEventStore(
 
       cleanThrow(() => {
         // Verify that the actual events and expected events have the same length
-        expect(events).toHaveLength(
-          testRecordingProjector.producedEvents.length
-        )
+        expect(events).toHaveLength(projector.producedEvents.length)
 
         // Verify each individual event
         for (let [index, event] of events.entries()) {
           let { aggregateId, eventName, payload } =
-            testRecordingProjector.producedEvents[index]
+            projector.producedEvents[index]
 
           expect(event.aggregateId).toEqual(aggregateId)
           expect(event.eventName).toEqual(eventName)
