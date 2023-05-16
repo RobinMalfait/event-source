@@ -40,41 +40,47 @@ function cleanThrow(cb: () => unknown, fn: Function) {
   }
 }
 
+class TestRecordingProjector {
+  name = 'test-recording-projector'
+
+  constructor(
+    public db: EventType<any, any>[] = [],
+    public producedEvents: EventType<any, any>[] = []
+  ) {}
+
+  init() {
+    this.db.splice(0)
+  }
+
+  update<T>(event: EventType<T, any>) {
+    this.producedEvents.push(event)
+  }
+}
+
 export function createTestEventStore(
   commandHandlers: Record<string, CommandHandler<any>>,
   projectors: Projector[] = []
 ) {
-  let db: EventType<any, any>[] = []
-  let producedEvents: EventType<any, any>[] = []
-
   info.usedTestEventStoreInTest = true
 
-  function createTestRecordingProjector() {
-    return {
-      name: 'test-recording-projector',
-      init() {
-        db.splice(0)
-      },
-      update<T>(event: EventType<T, any>) {
-        producedEvents.push(event)
-      },
-    }
-  }
+  let testRecordingProjector = new TestRecordingProjector()
 
   let es = createEventSource({
     store: {
       async load(aggregateId) {
-        return db.filter((event) => event.aggregateId === aggregateId)
+        return testRecordingProjector.db.filter(
+          (event) => event.aggregateId === aggregateId
+        )
       },
       loadEvents() {
-        return db
+        return testRecordingProjector.db
       },
       persist(events) {
-        db.push(...events)
+        testRecordingProjector.db.push(...events)
       },
     },
     commandHandlers: commandHandlers,
-    projectors: [...projectors, createTestRecordingProjector()],
+    projectors: [...projectors, testRecordingProjector],
   })
 
   let caughtError: Error
@@ -82,7 +88,7 @@ export function createTestEventStore(
   let returnValue = {
     ___: PLACEHOLDER as any, // Expose as type `any` so that it is assignable to values
     async given(events: EventType<any, any>[] = []) {
-      db.push(...events)
+      testRecordingProjector.db.push(...events)
     },
     async when<T>(
       command: CommandType<T> | (() => CommandType<T>)
@@ -125,11 +131,14 @@ export function createTestEventStore(
 
       cleanThrow(() => {
         // Verify that the actual events and expected events have the same length
-        expect(events).toHaveLength(producedEvents.length)
+        expect(events).toHaveLength(
+          testRecordingProjector.producedEvents.length
+        )
 
         // Verify each individual event
         for (let [index, event] of events.entries()) {
-          let { aggregateId, eventName, payload } = producedEvents[index]
+          let { aggregateId, eventName, payload } =
+            testRecordingProjector.producedEvents[index]
 
           expect(event.aggregateId).toEqual(aggregateId)
           expect(event.eventName).toEqual(eventName)
