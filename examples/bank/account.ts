@@ -11,34 +11,6 @@ enum State {
   CLOSED,
 }
 
-// enum ActionTypes {
-//   A = 'MONEY_WAS_DEPOSITED',
-//   B = 'MONEY_WAS_WITHDRAWN',
-//   C = 'BANK_ACCOUNT_HAS_BEEN_OPENED',
-// }
-//
-// type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
-//
-// type Actions =
-//   | ({ type: ActionTypes.A } & MoneyWasDeposited)
-//   | ({ type: ActionTypes.B } & MoneyWasWithdrawn)
-//   | ({ type: ActionTypes.C } & BankAccountHasBeenOpened)
-//
-// let reducers: {
-//   [P in ActionTypes]: (event: Expand<Extract<Actions, { type: P }>>) => void
-// } = {
-//   [Events.MONEY_WAS_DEPOSITED](event) {
-//     console.log({ event })
-//   },
-//   [Events.MONEY_WAS_WITHDRAWN](event) {
-//     console.log({ event })
-//   },
-//   [Events.BANK_ACCOUNT_HAS_BEEN_OPENED](event) {
-//     console.log({ event })
-//   },
-// }
-// console.log({ reducers })
-
 export class Account extends Aggregate {
   private id: string
   private balance: number
