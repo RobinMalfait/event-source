@@ -25,6 +25,21 @@ it('should be possible to withdraw money from a bank account', async () => {
   await then([moneyWasWithdrawn(id, 2_000)])
 })
 
+it('should be possible to withdraw all the money from a bank account', async () => {
+  let { given, when, then } = createTestEventStore({
+    WITHDRAW_MONEY: withdrawMoneyHandler,
+  })
+
+  let id = randomUUID()
+
+  await given([
+    bankAccountHasBeenOpened(id, 'Jane Doe'),
+    moneyWasDeposited(id, 5_000),
+  ])
+  await when(withdrawMoney(id, 5_000))
+  await then([moneyWasWithdrawn(id, 5_000)])
+})
+
 it('should not be possible to withdraw money from a bank account that has insufficient funds', async () => {
   let { given, when, then } = createTestEventStore({
     WITHDRAW_MONEY: withdrawMoneyHandler,
